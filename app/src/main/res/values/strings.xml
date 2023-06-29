@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">FlashBox</string>
+    <string name="layer_button">Button</string>
+    <string name="layer_dpad">D-Pad</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="warning">Warning</string>
+    <string name="confirm_del_layer">Confirm to delete this view?</string>
+    <string name="select_add_layer">Select to add:</string>
+    <string name="view_width">Width</string>
+    <string name="view_height">Height</string>
+    <string name="view_x">X</string>
+    <string name="view_y">Y</string>
+    <string name="view_text">Text</string>
+    <string name="keep_press">Keep Press</string>
+    <string name="edit_view">Edit View</string>
+    <string name="key_code">Key Code</string>
+    <string name="ellipsis">…</string>
+    <string name="map_up_limit">Map up to three keys.</string>
+    <string name="error">Error</string>
+</resources>

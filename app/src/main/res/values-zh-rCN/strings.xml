@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlashBox</string>
+    <string name="layer_button">按钮</string>
+    <string name="layer_dpad">方向键（十字键）</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="warning">警告</string>
+    <string name="confirm_del_layer">确定要删除这个控件吗？</string>
+    <string name="select_add_layer">选择要添加的控件：</string>
+    <string name="view_width">控件宽度</string>
+    <string name="view_height">控件高度</string>
+    <string name="view_x">X坐标</string>
+    <string name="view_y">Y坐标</string>
+    <string name="view_text">控件文本</string>
+    <string name="keep_press">保持按住</string>
+    <string name="edit_view">编辑控件</string>
+    <string name="key_code">按键值</string>
+    <string name="ellipsis">…</string>
+    <string name="map_up_limit">最多映射3个键</string>
+    <string name="error">错误</string>
+</resources>

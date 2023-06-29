@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="array_add_layer_options">
+        <item>@string/layer_button</item>
+        <item>@string/layer_dpad</item>
+    </array>
+
+</resources>

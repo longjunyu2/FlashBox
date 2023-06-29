@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_grey"
+    android:divider="@drawable/bg_divider_grey"
+    android:orientation="vertical"
+    android:padding="2dp"
+    android:showDividers="middle">
+
+    <View
+        android:id="@+id/btn_lock"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/ic_baseline_settings_24" />
+
+    <View
+        android:id="@+id/btn_add"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/bg_selector_add"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/btn_del"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/bg_selector_delete"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/btn_edit"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/bg_selector_edit"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/btn_align_v"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/ic_baseline_border_vertical_24"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/btn_align_h"
+        android:layout_width="@dimen/dimen_btn_size"
+        android:layout_height="@dimen/dimen_btn_size"
+        android:layout_margin="1dp"
+        android:background="@drawable/ic_baseline_border_horizontal_24"
+        android:visibility="gone" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
