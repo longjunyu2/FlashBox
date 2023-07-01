@@ -25,4 +25,9 @@
     <string name="select_controller">选择手柄</string>
     <string name="unavailable">不可用</string>
     <string name="select_key">选择键</string>
+    <string name="note">提示</string>
+    <string name="keyboard_available">一个可用的键盘已就绪。</string>
+    <string name="keyboard_unavailable">当前使用的键盘已被移除。</string>
+    <string name="controller_available">一个可用的手柄已就绪。</string>
+    <string name="controller_unavailable">当前使用的手柄已被移除。</string>
 </resources>

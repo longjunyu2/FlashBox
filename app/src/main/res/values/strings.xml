@@ -24,4 +24,9 @@
     <string name="select_controller">Select Controller</string>
     <string name="unavailable">Unavailable</string>
     <string name="select_key">Select Key</string>
+    <string name="note">Note</string>
+    <string name="keyboard_available">An available keyboard has been ready.</string>
+    <string name="keyboard_unavailable">The keyboard has been removed.</string>
+    <string name="controller_available">An available controller has been ready.</string>
+    <string name="controller_unavailable">The controller has been removed.</string>
 </resources>

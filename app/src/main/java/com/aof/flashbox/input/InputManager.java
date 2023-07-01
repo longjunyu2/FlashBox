@@ -51,6 +51,8 @@ public class InputManager {
         layers = new ArrayList<>();
     }
 
+    // TODO: 实现一个销毁方法，以便在退出是正确回收资源
+
     /**
      * 开始创建并初始化控制层
      *
@@ -234,6 +236,7 @@ public class InputManager {
                                 // 实际上控件的删除仍然是在InputManager对象中完成的
                                 finalRootLayer.getView().removeView(layer.getView());
                                 layers.remove(layer);
+                                layer.destroy();
                             }
                         })
                         .setNegativeButton(mContext.getResources().getString(R.string.cancel), null)

@@ -149,6 +149,13 @@ public abstract class BaseLayer implements View.OnTouchListener {
      */
     public abstract void openEditDialog();
 
+    /**
+     * 销毁时执行
+     */
+    public void destroy() {
+        // 销毁时回收资源
+    }
+
     private static class Trigger {
         private final WeakReference<BaseLayer> weakLayer;
 

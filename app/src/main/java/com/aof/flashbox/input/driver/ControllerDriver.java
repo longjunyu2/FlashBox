@@ -5,13 +5,12 @@ import static android.view.KeyEvent.ACTION_UP;
 
 import android.view.KeyEvent;
 
-import com.aof.flashbox.input.key.AndroidKeyMap;
 import com.aof.flashbox.input.key.KeyCodes;
 import com.aof.flashbox.input.widget.RootLayerConfig;
 
-public class KeyboardDriver extends BaseDriver {
+public class ControllerDriver extends BaseDriver {
 
-    public KeyboardDriver(RootLayerConfig config) {
+    public ControllerDriver(RootLayerConfig config) {
         super(config);
     }
 
@@ -27,16 +26,13 @@ public class KeyboardDriver extends BaseDriver {
      * @return 是否拦截事件
      */
     public boolean keyEvent_to_inputEvent(KeyEvent event) {
-        // 判断是否来自选定的键盘设备，是否为第一次触发
-        if (getConfig().getKeyboard().deviceId != event.getDeviceId()
-                || event.getRepeatCount() != 0)
+        // 判断是否来自选定的键盘设备
+        if (getConfig().getController().deviceId != event.getDeviceId())
             return false;
 
-        // 判断是否是可用键值
-        KeyCodes.Codes key = AndroidKeyMap.getAndroidKeyMap().get(event.getKeyCode());
-        if (key == null)
-            return false;
-
+        // 获取映射键值并判断键值是否可用
+        // TODO: 实现手柄按键映射
+        KeyCodes.Codes key = KeyCodes.Codes.Unknown;
 
         // 判断是否为可用的动作
         com.aof.flashbox.input.event.KeyEvent.Action action;

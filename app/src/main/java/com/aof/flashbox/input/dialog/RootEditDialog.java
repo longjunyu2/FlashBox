@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.InputDevice;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialog;
@@ -32,9 +34,9 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
 
     private AppCompatTextView textSelectedController;
 
-    private List<String> keyboardList;
+    private List<RootLayerConfig.InputDeviceInfo> keyboardList;
 
-    private List<String> controllerList;
+    private List<RootLayerConfig.InputDeviceInfo> controllerList;
 
     public RootEditDialog(@NonNull Context context, RootLayerConfig config) {
         super(context);
@@ -58,24 +60,41 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         textSelectedKeyboard = findViewById(R.id.text_selected_keyboard);
         AppCompatButton btnSelectKeyboard = findViewById(R.id.btn_select_keyboard);
         assert viewSelectKeyboard != null && textSelectedKeyboard != null && btnSelectKeyboard != null;
+        // 如果未启用物理键盘，则不显示选择物理键盘项
         if (!config.isEnableKeyboard())
             viewSelectKeyboard.setVisibility(View.GONE);
+        // 为开关添加回调
         switchEnableKeyboard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 更新选择物理键盘项的可见性
                 viewSelectKeyboard.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                // 更新配置
                 config.setEnableKeyboard(isChecked);
             }
         });
+        // 点击文本框则显示文本框内容，防止文本内容过长导致的不可见
+        textSelectedKeyboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        // 点击按钮则显示选择控制器的对话框
         btnSelectKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String[] keyboardNames = new String[keyboardList.size()];
+                for (int i = 0; i < keyboardList.size(); i++)
+                    keyboardNames[i] = keyboardList.get(i).toString();
+
                 // 创建选择键盘的对话框
                 new MaterialAlertDialogBuilder(getContext())
                         .setTitle(R.string.select_keyboard)
-                        .setItems(keyboardList.toArray(new String[0]), new OnClickListener() {
+                        .setItems(keyboardNames, new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 更新配置
                                 config.setKeyboard(keyboardList.get(which));
                                 updateKeyboardAndController();
                             }
@@ -96,24 +115,41 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         textSelectedController = findViewById(R.id.text_selected_controller);
         AppCompatButton btnSelectController = findViewById(R.id.btn_select_controller);
         assert viewSelectController != null && textSelectedController != null && btnSelectController != null;
+        // 如果未启用物理控制器，则不显示选择物理控制器项
         if (!config.isEnableController())
             viewSelectController.setVisibility(View.GONE);
+        // 为开关添加回调
         switchEnableController.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 更新选择物理控制器项的可见性
                 viewSelectController.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                // 更新配置
                 config.setEnableController(isChecked);
             }
         });
+        // 点击文本框则显示文本框内容，防止文本内容过长导致的不可见
+        textSelectedController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        // 点击按钮则显示选择控制器的对话框
         btnSelectController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String[] controllerNames = new String[controllerList.size()];
+                for (int i = 0; i < controllerList.size(); i++)
+                    controllerNames[i] = controllerList.get(i).toString();
+
                 // 创建选择控制器的对话框
                 new MaterialAlertDialogBuilder(getContext())
                         .setTitle(R.string.select_controller)
-                        .setItems(controllerList.toArray(new String[0]), new OnClickListener() {
+                        .setItems(controllerNames, new OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // 更新配置
                                 config.setController(controllerList.get(which));
                                 updateKeyboardAndController();
                             }
@@ -124,7 +160,7 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
             }
         });
 
-        // 更新选择的物理键盘和物理控制器
+        // 首次更新选择的物理键盘和物理控制器
         updateKeyboardAndController();
 
         // TODO: 添加和实现对触屏控制的配置
@@ -168,13 +204,13 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         for (int id : getKeyboardDeviceIds(InputDevice.SOURCE_KEYBOARD)) {
             InputDevice device = inputManager.getInputDevice(id);
             if (device != null)
-                keyboardList.add(device.getName());
+                keyboardList.add(new RootLayerConfig.InputDeviceInfo(device));
         }
 
         if (keyboardList.contains(config.getKeyboard()))
-            textSelectedKeyboard.setText(config.getKeyboard());
+            textSelectedKeyboard.setText(config.getKeyboard().name);
         textSelectedKeyboard.setText(keyboardList.contains(config.getKeyboard())
-                ? config.getKeyboard()
+                ? config.getKeyboard().name
                 : getContext().getString(R.string.unavailable));
 
         // 更新选择的物理控制器
@@ -186,13 +222,13 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         for (int id : getKeyboardDeviceIds(InputDevice.SOURCE_GAMEPAD)) {
             InputDevice device = inputManager.getInputDevice(id);
             if (device != null)
-                controllerList.add(device.getName());
+                controllerList.add(new RootLayerConfig.InputDeviceInfo(device));
         }
 
         if (controllerList.contains(config.getKeyboard()))
-            textSelectedController.setText(config.getKeyboard());
+            textSelectedController.setText(config.getKeyboard().name);
         textSelectedController.setText(controllerList.contains(config.getKeyboard())
-                ? config.getController()
+                ? config.getController().name
                 : getContext().getString(R.string.unavailable));
     }
 
