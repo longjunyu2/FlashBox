@@ -17,7 +17,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.aof.flashbox.R;
-import com.aof.flashbox.input.KeyCodes;
+import com.aof.flashbox.input.key.KeyCodes;
 import com.aof.flashbox.input.widget.GameButtonLayerConfig;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 

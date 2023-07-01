@@ -7,7 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialog;
 
-import com.aof.flashbox.input.KeyCodes;
+import com.aof.flashbox.R;
+import com.aof.flashbox.input.key.KeyCodes;
 import com.aof.flashbox.input.view.KeyboardView;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class SelectKeyDialog extends AppCompatDialog {
 
     public SelectKeyDialog(@NonNull Context context, List<KeyCodes.Codes> keys) {
         super(context);
+        setTitle(R.string.select_key);
         this.keys = keys;
     }
 

@@ -1,4 +1,4 @@
-package com.aof.flashbox.input;
+package com.aof.flashbox.input.key;
 
 import java.util.HashMap;
 
@@ -124,9 +124,6 @@ public class KeyCodes {
         RMeta(Unknown.value()),
         LMeta(Unknown.value()),
         Print(Unknown.value());
-
-
-
 
         private final int value;
 

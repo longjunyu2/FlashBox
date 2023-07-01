@@ -15,65 +15,7 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <!-- 控件宽度项 -->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/view_width" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_width"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:singleLine="true" />
-
-                <androidx.appcompat.widget.AppCompatSeekBar
-                    android:id="@+id/seekbar_width"
-                    android:layout_width="@dimen/dimen_config_len"
-                    android:layout_height="wrap_content" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-            <!-- 控件高度项 -->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/view_height" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_height"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:singleLine="true" />
-
-                <androidx.appcompat.widget.AppCompatSeekBar
-                    android:id="@+id/seekbar_height"
-                    android:layout_width="@dimen/dimen_config_len"
-                    android:layout_height="wrap_content" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-            <!-- 键值项 -->
+            <!-- 物理键盘开关项 -->
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,7 +34,39 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/key_code" />
+                        android:text="@string/enable_keyboard" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_enable_keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="end" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!-- 物理键盘选择项 -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/select_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/select_keyboard" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -102,16 +76,18 @@
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/text_key"
+                        android:id="@+id/text_selected_keyboard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:maxWidth="100dp"
+                        android:singleLine="true" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_select"
+                    android:id="@+id/btn_select_keyboard"
                     android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:gravity="end"
@@ -119,8 +95,7 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <!-- 保持按住开关项 -->
+            <!-- 物理控制器开关项 -->
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,84 +114,64 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/keep_press" />
+                        android:text="@string/enable_controller" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switch_keep"
+                    android:id="@+id/switch_enable_controller"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:gravity="end" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <!-- 控件文本项 -->
+            <!-- 物理控制器选择项 -->
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/select_controller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="@string/view_text" />
+                    android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_text"
-                    android:layout_width="@dimen/dimen_config_len"
-                    android:layout_height="wrap_content"
-                    android:gravity="end" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/select_keyboard" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <!-- 控件X坐标项 -->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:text="@string/view_x" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_x"
-                    android:layout_width="@dimen/dimen_config_len"
-                    android:layout_height="wrap_content"
-                    android:gravity="end" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_selected_controller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:maxWidth="100dp"
+                        android:singleLine="true" />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <!-- 控件Y坐标项 -->
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:text="@string/view_y" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_y"
-                    android:layout_width="@dimen/dimen_config_len"
-                    android:layout_height="wrap_content"
-                    android:gravity="end" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_select_controller"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:gravity="end"
+                    android:text="@string/ellipsis" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

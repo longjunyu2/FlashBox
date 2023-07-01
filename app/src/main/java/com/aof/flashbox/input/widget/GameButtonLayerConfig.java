@@ -1,6 +1,6 @@
 package com.aof.flashbox.input.widget;
 
-import com.aof.flashbox.input.KeyCodes;
+import com.aof.flashbox.input.key.KeyCodes;
 
 import java.util.ArrayList;
 import java.util.Arrays;

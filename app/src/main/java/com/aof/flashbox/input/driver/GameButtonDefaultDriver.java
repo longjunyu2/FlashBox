@@ -2,7 +2,7 @@ package com.aof.flashbox.input.driver;
 
 import android.view.MotionEvent;
 
-import com.aof.flashbox.input.KeyCodes;
+import com.aof.flashbox.input.key.KeyCodes;
 import com.aof.flashbox.input.event.KeyEvent;
 import com.aof.flashbox.input.widget.GameButtonLayerConfig;
 
@@ -16,6 +16,11 @@ public class GameButtonDefaultDriver extends BaseDriver {
         super(config);
     }
 
+    /**
+     * 从MotionEvent生成BaseInputEvent
+     *
+     * @param event MotionEvent
+     */
     public void motionEvent_to_inputEvent(MotionEvent event) {
         KeyEvent.Action action = null;
 

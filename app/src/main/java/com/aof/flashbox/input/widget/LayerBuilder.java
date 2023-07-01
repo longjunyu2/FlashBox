@@ -38,7 +38,7 @@ public class LayerBuilder {
 
         switch (mConfig.getType()) {
             case Root:
-                layer = new RootLayer(mAgent, null);
+                layer = new RootLayer(mAgent, (RootLayerConfig) mConfig);
                 break;
             case GameButton:
                 layer = new GameButtonLayer(mAgent, (GameButtonLayerConfig) mConfig);

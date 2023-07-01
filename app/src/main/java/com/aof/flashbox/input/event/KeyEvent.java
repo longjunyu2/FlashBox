@@ -1,6 +1,6 @@
 package com.aof.flashbox.input.event;
 
-import com.aof.flashbox.input.KeyCodes;
+import com.aof.flashbox.input.key.KeyCodes;
 
 public class KeyEvent extends BaseInputEvent {
     public enum Action {

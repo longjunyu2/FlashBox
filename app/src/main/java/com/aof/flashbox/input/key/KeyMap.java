@@ -1,4 +1,4 @@
-package com.aof.flashbox.input;
+package com.aof.flashbox.input.key;
 
 import java.util.HashMap;
 

@@ -19,4 +19,10 @@
     <string name="ellipsis">…</string>
     <string name="map_up_limit">最多映射3个键</string>
     <string name="error">错误</string>
+    <string name="enable_keyboard">启用键盘</string>
+    <string name="enable_controller">启用手柄</string>
+    <string name="select_keyboard">选择键盘</string>
+    <string name="select_controller">选择手柄</string>
+    <string name="unavailable">不可用</string>
+    <string name="select_key">选择键</string>
 </resources>

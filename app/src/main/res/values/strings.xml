@@ -18,4 +18,10 @@
     <string name="ellipsis">…</string>
     <string name="map_up_limit">Map up to three keys.</string>
     <string name="error">Error</string>
+    <string name="enable_keyboard">Enable Keyboard</string>
+    <string name="enable_controller">Enable Controller</string>
+    <string name="select_keyboard">Select Keyboard</string>
+    <string name="select_controller">Select Controller</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="select_key">Select Key</string>
 </resources>

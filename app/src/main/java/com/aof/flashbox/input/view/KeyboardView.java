@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.aof.flashbox.input.KeyCodes;
-import com.aof.flashbox.input.KeyMap;
+import com.aof.flashbox.input.key.KeyCodes;
+import com.aof.flashbox.input.key.KeyMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
