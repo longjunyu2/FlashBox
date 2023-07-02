@@ -201,7 +201,7 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         else
             keyboardList.clear();
 
-        for (int id : getKeyboardDeviceIds(InputDevice.SOURCE_KEYBOARD)) {
+        for (int id : getKeyboardDeviceIds()) {
             InputDevice device = inputManager.getInputDevice(id);
             if (device != null)
                 keyboardList.add(new RootLayerConfig.InputDeviceInfo(device));
@@ -219,48 +219,72 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         else
             controllerList.clear();
 
-        for (int id : getKeyboardDeviceIds(InputDevice.SOURCE_GAMEPAD)) {
+        for (int id : getControllerDeviceIds()) {
             InputDevice device = inputManager.getInputDevice(id);
             if (device != null)
                 controllerList.add(new RootLayerConfig.InputDeviceInfo(device));
         }
 
-        if (controllerList.contains(config.getKeyboard()))
-            textSelectedController.setText(config.getKeyboard().name);
-        textSelectedController.setText(controllerList.contains(config.getKeyboard())
+        if (controllerList.contains(config.getController()))
+            textSelectedController.setText(config.getController().name);
+        textSelectedController.setText(controllerList.contains(config.getController())
                 ? config.getController().name
                 : getContext().getString(R.string.unavailable));
     }
 
+    private ArrayList<Integer> getKeyboardDeviceIds() {
+        ArrayList<Integer> extKeyboardIds = new ArrayList<>();
+        int[] ids = inputManager.getInputDeviceIds();
+
+        for (int id : ids)
+            if (isKeyboard(id))
+                extKeyboardIds.add(id);
+
+        return extKeyboardIds;
+    }
+
+    private ArrayList<Integer> getControllerDeviceIds() {
+        ArrayList<Integer> extControllerIds = new ArrayList<>();
+        int[] ids = inputManager.getInputDeviceIds();
+
+        for (int id : ids)
+            if (isController(id))
+                extControllerIds.add(id);
+
+        return extControllerIds;
+    }
+
     /**
-     * 获取目标设备id列表
-     *
-     * @param sourceTarget 目标设备源
-     * @return 目标设备id列表
+     * 判断设备是否是键盘
+     * @param deviceId 设备id
+     * @return 是否是键盘
      */
-    private ArrayList<Integer> getKeyboardDeviceIds(int sourceTarget) {
-        int[] inputDeviceIds = inputManager.getInputDeviceIds();
-        ArrayList<Integer> extDeviceIds = new ArrayList<>();
+    private boolean isKeyboard(int deviceId) {
+        InputDevice device = inputManager.getInputDevice(deviceId);
 
-        for (int deviceId : inputDeviceIds) {
-            InputDevice device = inputManager.getInputDevice(deviceId);
-            if (device == null)
-                continue;
-            int sources = device.getSources();
+        if (device == null)
+            return false;
 
-            // 只获取外部键盘设备
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // 对于安卓Q及以上，判断是否是外部设备
-                if ((sources & sourceTarget) == sourceTarget && device.isExternal()) {
-                    extDeviceIds.add(deviceId);
-                }
-            } else {
-                if ((sources & sourceTarget) == sourceTarget) {
-                    extDeviceIds.add(deviceId);
-                }
-            }
-        }
+        boolean ret = (device.getSources() & InputDevice.SOURCE_KEYBOARD) != 0
+                && (device.getKeyboardType() == InputDevice.KEYBOARD_TYPE_ALPHABETIC);
 
-        return extDeviceIds;
+        // 在安卓10及以上才能判断
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ? ret && device.isExternal() : ret;
+    }
+
+    /**
+     * 判断设备是否是控制器
+     * @param deviceId 设备id
+     * @return 是否是控制器
+     */
+    private boolean isController(int deviceId) {
+        InputDevice device = inputManager.getInputDevice(deviceId);
+
+        if (device == null)
+            return false;
+
+        boolean ret = (device.getSources() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD;
+
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ? ret && device.isExternal() : ret;
     }
 }

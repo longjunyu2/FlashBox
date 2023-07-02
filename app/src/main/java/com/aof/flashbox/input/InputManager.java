@@ -5,7 +5,6 @@ import static com.aof.flashbox.input.widget.BaseLayerConfig.ScreenDiv;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -215,10 +214,7 @@ public class InputManager {
 
             @Override
             public void onSelectedChanged(boolean selected) {
-                if (selected)
-                    setBtnVisibility(View.VISIBLE, navigationView, btnIds);
-                else
-                    setBtnVisibility(View.GONE, navigationView, btnIds);
+                setBtnVisibility(selected ? View.VISIBLE : View.GONE, navigationView, btnIds);
             }
         });
 

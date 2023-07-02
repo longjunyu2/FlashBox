@@ -9,7 +9,7 @@ public abstract class BaseLayerConfig {
     }
 
     // 比例因子
-    public static int ScreenDiv = 100;
+    public static final int ScreenDiv = 100;
 
     // 控制层宽
     private int width;

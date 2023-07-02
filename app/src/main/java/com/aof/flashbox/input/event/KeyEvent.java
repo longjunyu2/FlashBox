@@ -8,9 +8,9 @@ public class KeyEvent extends BaseInputEvent {
         Up
     }
 
-    public Action action;
+    public final Action action;
 
-    public KeyCodes.Codes key;
+    public final KeyCodes.Codes key;
 
     public KeyEvent(Action action, KeyCodes.Codes key) {
         this.action = action;

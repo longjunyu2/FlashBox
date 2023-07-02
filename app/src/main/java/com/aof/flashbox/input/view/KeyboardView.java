@@ -1,5 +1,6 @@
 package com.aof.flashbox.input.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,6 +22,7 @@ import com.aof.flashbox.input.key.KeyMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressLint("ViewConstructor")
 public class KeyboardView extends FrameLayout {
     private final Context context;
     private final KeyboardParams keyboardParams;
@@ -145,19 +147,19 @@ public class KeyboardView extends FrameLayout {
         private final KeyCodes.Codes key;
         private final int height;
         private boolean selected = false;
-        int[] insetMargins = DEFAULT_INSET_MARGINS;
-        float outerRadius = DEFAULT_OUTER_RADIUS;
-        float innerRadius = DEFAULT_INNER_RADIUS;
+        final int[] insetMargins = DEFAULT_INSET_MARGINS;
+        final float outerRadius = DEFAULT_OUTER_RADIUS;
+        final float innerRadius = DEFAULT_INNER_RADIUS;
         int edgeSize = DEFAULT_EDGE_SIZE;
         int edgeColor = DEFAULT_EDGE_COLOR;
-        int innerColor = DEFAULT_INNER_COLOR;
-        int innerPressedColor = DEFAULT_INNER_PRESSED_COLOR;
-        int outerColor = DEFAULT_OUTER_COLOR;
-        int outerPressedColor = DEFAULT_OUTER_PRESSED_COLOR;
+        final int innerColor = DEFAULT_INNER_COLOR;
+        final int innerPressedColor = DEFAULT_INNER_PRESSED_COLOR;
+        final int outerColor = DEFAULT_OUTER_COLOR;
+        final int outerPressedColor = DEFAULT_OUTER_PRESSED_COLOR;
         int symbolColor = DEFAULT_SYMBOL_COLOR;
-        int mainSymbolSizeSp = DEFAULT_MAIN_SYMBOL_SIZE;
-        int viceSymbolSizeSp = DEFAULT_VICE_SYMBOL_SIZE;
-        int symbolOffset = DEFAULT_SYMBOL_OFFSET;
+        final int mainSymbolSizeSp = DEFAULT_MAIN_SYMBOL_SIZE;
+        final int viceSymbolSizeSp = DEFAULT_VICE_SYMBOL_SIZE;
+        final int symbolOffset = DEFAULT_SYMBOL_OFFSET;
 
         public KeyboardButton(KeyParams keyParams) {
             super(context);
@@ -352,7 +354,7 @@ public class KeyboardView extends FrameLayout {
         }
 
         public int getKeyboardViewWidth() {
-            return (int) (keyCellSizePx * 23);
+            return keyCellSizePx * 23;
         }
 
         public int getKeyboardViewHeight() {
@@ -640,11 +642,11 @@ public class KeyboardView extends FrameLayout {
     }
 
     private static class KeyParams {
-        public int height;
-        public int width;
-        public int x;
-        public int y;
-        public KeyCodes.Codes key;
+        public final int height;
+        public final int width;
+        public final int x;
+        public final int y;
+        public final KeyCodes.Codes key;
 
         public KeyParams(int width, int height, int x, int y, KeyCodes.Codes key) {
             this.height = height;

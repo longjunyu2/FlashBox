@@ -117,6 +117,8 @@ public class GameButtonLayer extends BaseLayer {
 
         GradientDrawable drawable;
 
+        private final static int MiddleBlue = Color.parseColor("#3498D8");
+
         public GameButton(@NonNull Context context) {
             super(context);
 
@@ -139,10 +141,7 @@ public class GameButtonLayer extends BaseLayer {
 
         public void setSelected(boolean selected) {
             // 根据选中状态更新背景
-            if (selected)
-                drawable.setStroke(8, Color.parseColor("#3498DB"));
-            else
-                drawable.setStroke(8, Color.BLACK);
+            drawable.setStroke(8, selected ? MiddleBlue : Color.BLACK);
 
             setBackground(drawable);
         }

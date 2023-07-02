@@ -51,12 +51,14 @@ public interface IInputAgent {
 
     /**
      * 添加到被选中列表
+     *
      * @param layer 控制层
      */
     void addSelected(BaseLayer layer);
 
     /**
      * 获取是否启用震动
+     *
      * @return 是否启用震动
      */
     boolean isVibrateEnabled();
