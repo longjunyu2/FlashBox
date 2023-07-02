@@ -60,7 +60,7 @@ public class RootLayer extends BaseLayer implements InputManager.InputDeviceList
 
         // 创建手柄控制器
         controllerDriver = new ControllerDriver(getConfig());
-        keyboardDriver.setOnEventGenCallback(new BaseDriver.OnEventGenCallback() {
+        controllerDriver.setOnEventGenCallback(new BaseDriver.OnEventGenCallback() {
             @Override
             public void onEventGen(BaseInputEvent event) {
                 getAgent().offerEvent(event);
