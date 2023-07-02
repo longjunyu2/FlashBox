@@ -4,19 +4,73 @@ import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.ACTION_UP;
 
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import com.aof.flashbox.input.key.KeyCodes;
 import com.aof.flashbox.input.widget.RootLayerConfig;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ControllerDriver extends BaseDriver {
+
+    private final List<RootLayerConfig.ControllerAxis> triggeredList;
 
     public ControllerDriver(RootLayerConfig config) {
         super(config);
+        triggeredList = new ArrayList<>();
     }
 
     @Override
     public RootLayerConfig getConfig() {
         return (RootLayerConfig) super.getConfig();
+    }
+
+    /**
+     * 从MotionEvent生成BaseInputEvent
+     *
+     * @param event MotionEvent
+     * @return 是否拦截事件
+     */
+    public boolean motionEvent_to_inputEvent(MotionEvent event) {
+        // 判断是否来自选定的控制器设备
+        if (getConfig().getController().deviceId != event.getDeviceId())
+            return false;
+
+        // 遍历所有轴
+        RootLayerConfig.ControllerAxis[] axes = getConfig().getControllerAxes();
+        for (RootLayerConfig.ControllerAxis axis : axes) {
+            // 检查键值是否可用
+            KeyCodes.Codes key = keyCode(axis.key);
+            if (key == null)
+                continue;
+
+            // 处理轴信息
+            float realValue = event.getAxisValue(axis.axis_flag) * axis.dir;
+            float triggerValue = axis.trigger_per_value * 0.01f;
+            com.aof.flashbox.input.event.KeyEvent.Action action = null;
+
+            if (realValue > triggerValue) {
+                // 正触发
+                if (!triggeredList.contains(axis)) {
+                    action = com.aof.flashbox.input.event.KeyEvent.Action.Down;
+                    triggeredList.add(axis);
+                } else
+                    continue;
+            } else if (realValue < triggerValue){
+                // 负触发
+                if (triggeredList.contains(axis)) {
+                    action = com.aof.flashbox.input.event.KeyEvent.Action.Up;
+                    triggeredList.remove(axis);
+                } else
+                    continue;
+            }
+
+            // 生成输入事件
+            getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
+        }
+
+        return true;
     }
 
     /**
@@ -26,17 +80,17 @@ public class ControllerDriver extends BaseDriver {
      * @return 是否拦截事件
      */
     public boolean keyEvent_to_inputEvent(KeyEvent event) {
-        // 判断是否来自选定的控制器设备
-        if (getConfig().getController().deviceId != event.getDeviceId())
+        // 判断是否来自选定的控制器设备, 是否为第一次触发
+        if (getConfig().getController().deviceId != event.getDeviceId()
+                || event.getRepeatCount() != 0)
             return false;
 
         // 获取映射键值并判断键值是否可用
-        KeyCodes.Codes key = getConfig().getControllerBtn().getKey(event.getKeyCode());
+        KeyCodes.Codes key = getKey(event.getKeyCode());
         if (key == null)
-            // 即使键值不可用依然消费掉该事件
             return true;
 
-        // 判断是否为可用的动作
+        // 获取动作
         com.aof.flashbox.input.event.KeyEvent.Action action;
         switch (event.getAction()) {
             case ACTION_DOWN:
@@ -46,11 +100,70 @@ public class ControllerDriver extends BaseDriver {
                 action = com.aof.flashbox.input.event.KeyEvent.Action.Up;
                 break;
             default:
-                return false;
+                return true;
         }
 
         // 生成输入事件
         getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
         return true;
+    }
+
+    /**
+     * 获取手柄按钮对应的键
+     * @param androidKeyCode Android键值
+     * @return 键
+     */
+    private KeyCodes.Codes getKey(int androidKeyCode) {
+        RootLayerConfig.ControllerBtn btn = getConfig().getControllerBtn();
+        switch (androidKeyCode) {
+            case KeyEvent.KEYCODE_BUTTON_A:
+                return keyCode(btn.key_Button_A);
+            case KeyEvent.KEYCODE_BUTTON_B:
+                return keyCode(btn.key_Button_B);
+            case KeyEvent.KEYCODE_BUTTON_X:
+                return keyCode(btn.key_Button_X);
+            case KeyEvent.KEYCODE_BUTTON_Y:
+                return keyCode(btn.key_Button_Y);
+            case KeyEvent.KEYCODE_BUTTON_L1:
+                return keyCode(btn.key_Button_L1);
+            case KeyEvent.KEYCODE_BUTTON_R1:
+                return keyCode(btn.key_Button_R1);
+            case KeyEvent.KEYCODE_BACK:
+                return keyCode(btn.key_Button_Back);
+            case KeyEvent.KEYCODE_BUTTON_SELECT:
+                return keyCode(btn.key_Button_Select);
+            case KeyEvent.KEYCODE_BUTTON_START:
+                return keyCode(btn.key_Button_Start);
+            case KeyEvent.KEYCODE_BUTTON_THUMBL:
+                return keyCode(btn.key_Button_ThumbL);
+            case KeyEvent.KEYCODE_BUTTON_THUMBR:
+                return keyCode(btn.key_Button_ThumbR);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 从键名获取键值，同时排除实际键值为Unknown的键
+     *
+     * @param keyName 键名
+     * @return 键值
+     */
+    private KeyCodes.Codes keyCode(String keyName) {
+        if (keyName.equals(""))
+            return null;
+
+        KeyCodes.Codes key = null;
+
+        try {
+            key = KeyCodes.Codes.valueOf(keyName);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        if (key != null && key.value() == KeyCodes.Codes.Unknown.value())
+            return null;
+
+        return key;
     }
 }

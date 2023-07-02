@@ -1,12 +1,10 @@
 package com.aof.flashbox.input.widget;
 
 import android.view.InputDevice;
-import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.aof.flashbox.input.key.KeyCodes;
 
 import java.util.Objects;
 
@@ -21,6 +19,8 @@ public class RootLayerConfig extends BaseLayerConfig {
     private InputDeviceInfo controller = new InputDeviceInfo();
 
     private ControllerBtn controllerBtn = new ControllerBtn();
+
+    private ControllerAxis[] controllerAxes = ControllerAxis.createDefaultAxes();
 
     public RootLayerConfig() {
         super();
@@ -132,6 +132,15 @@ public class RootLayerConfig extends BaseLayerConfig {
         return controllerBtn;
     }
 
+    /**
+     * 获取所有轴配置
+     *
+     * @return 轴配置
+     */
+    public ControllerAxis[] getControllerAxes() {
+        return this.controllerAxes;
+    }
+
     @Override
     public Type getType() {
         return Type.Root;
@@ -185,6 +194,62 @@ public class RootLayerConfig extends BaseLayerConfig {
         }
     }
 
+    public static class ControllerAxis {
+        // 轴标识
+        public int axis_flag;
+        // 轴方向
+        public int dir;
+        // 触发值 百分比
+        public int trigger_per_value;
+        // 键名
+        public String key;
+        // 默认触发值
+        private final static int DefaultTriggerValue = 30;
+
+        public ControllerAxis(int axis_flag, int dir, int trigger_per_value, String key) {
+            this.axis_flag = axis_flag;
+            this.dir = dir;
+            this.trigger_per_value = trigger_per_value;
+            this.key = key;
+        }
+
+        public ControllerAxis(int axis_flag, int dir, String key) {
+            this(axis_flag, dir, DefaultTriggerValue, key);
+        }
+
+        public ControllerAxis(int axis_flag, int dir) {
+            this(axis_flag, dir, DefaultTriggerValue, "");
+        }
+
+        /**
+         * 生成默认的轴配置
+         * @return 全部的轴配置
+         */
+        public static ControllerAxis[] createDefaultAxes() {
+            return new ControllerAxis[]{
+                    // 苦力帽(方向键/十字键)
+                    new ControllerAxis(MotionEvent.AXIS_HAT_X, 1),
+                    new ControllerAxis(MotionEvent.AXIS_HAT_X, -1),
+                    new ControllerAxis(MotionEvent.AXIS_HAT_Y, 1),
+                    new ControllerAxis(MotionEvent.AXIS_HAT_Y, -1),
+                    // 左摇杆
+                    new ControllerAxis(MotionEvent.AXIS_X, 1),
+                    new ControllerAxis(MotionEvent.AXIS_X, -1),
+                    new ControllerAxis(MotionEvent.AXIS_Y, 1),
+                    new ControllerAxis(MotionEvent.AXIS_Y, -1),
+                    // 右摇杆
+                    new ControllerAxis(MotionEvent.AXIS_Z, 1),
+                    new ControllerAxis(MotionEvent.AXIS_Z, -1),
+                    new ControllerAxis(MotionEvent.AXIS_RZ, 1),
+                    new ControllerAxis(MotionEvent.AXIS_RZ, -1),
+                    // 左扳机
+                    new ControllerAxis(MotionEvent.AXIS_BRAKE, 1),
+                    // 右扳机
+                    new ControllerAxis(MotionEvent.AXIS_GAS, 1)
+            };
+        }
+    }
+
     public static class ControllerBtn {
         public String key_Button_A = "";
         public String key_Button_B = "";
@@ -192,82 +257,10 @@ public class RootLayerConfig extends BaseLayerConfig {
         public String key_Button_Y = "";
         public String key_Button_L1 = "";
         public String key_Button_R1 = "";
-        public String key_Button_L2 = "";
-        public String key_Button_R2 = "";
         public String key_Button_Back = "";
         public String key_Button_Select = "";
         public String key_Button_Start = "";
         public String key_Button_ThumbL = "";
         public String key_Button_ThumbR = "";
-        public String key_Button_Up = "";
-        public String key_Button_Down = "";
-        public String key_Button_Left = "";
-        public String key_Button_Right = "";
-
-        public KeyCodes.Codes getKey(int androidKeyCode) {
-            switch (androidKeyCode) {
-                case KeyEvent.KEYCODE_BUTTON_A:
-                    return keyCode(key_Button_A);
-                case KeyEvent.KEYCODE_BUTTON_B:
-                    return keyCode(key_Button_B);
-                case KeyEvent.KEYCODE_BUTTON_X:
-                    return keyCode(key_Button_X);
-                case KeyEvent.KEYCODE_BUTTON_Y:
-                    return keyCode(key_Button_Y);
-                case KeyEvent.KEYCODE_BUTTON_L1:
-                    return keyCode(key_Button_L1);
-                case KeyEvent.KEYCODE_BUTTON_R1:
-                    return keyCode(key_Button_R1);
-                case KeyEvent.KEYCODE_BUTTON_L2:
-                    return keyCode(key_Button_L2);
-                case KeyEvent.KEYCODE_BUTTON_R2:
-                    return keyCode(key_Button_R2);
-                case KeyEvent.KEYCODE_BACK:
-                    return keyCode(key_Button_Back);
-                case KeyEvent.KEYCODE_BUTTON_SELECT:
-                    return keyCode(key_Button_Select);
-                case KeyEvent.KEYCODE_BUTTON_START:
-                    return keyCode(key_Button_Start);
-                case KeyEvent.KEYCODE_BUTTON_THUMBL:
-                    return keyCode(key_Button_ThumbL);
-                case KeyEvent.KEYCODE_BUTTON_THUMBR:
-                    return keyCode(key_Button_ThumbR);
-                case KeyEvent.KEYCODE_DPAD_UP:
-                    return keyCode(key_Button_Up);
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                    return keyCode(key_Button_Down);
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                    return keyCode(key_Button_Left);
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    return keyCode(key_Button_Right);
-                default:
-                    return null;
-            }
-        }
-
-        /**
-         * 从键名获取键值，同时排除实际键值为Unknown的键
-         *
-         * @param keyName 键名
-         * @return 键值
-         */
-        private KeyCodes.Codes keyCode(String keyName) {
-            if (keyName.equals(""))
-                return null;
-
-            KeyCodes.Codes key = null;
-
-            try {
-                key = KeyCodes.Codes.valueOf(keyName);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-
-            if (key != null && key.value() == KeyCodes.Codes.Unknown.value())
-                return null;
-
-            return key;
-        }
-
     }
 }

@@ -86,7 +86,13 @@ public class RootLayer extends BaseLayer implements InputManager.InputDeviceList
 
             @Override
             public boolean dispatchGenericMotionEvent(MotionEvent event) {
-                return false;
+                boolean ret = false;
+
+                // 优先使用手柄驱动器
+                if (getConfig().isEnableController())
+                    ret = controllerDriver.motionEvent_to_inputEvent(event);
+
+                return ret;
             }
 
             @Override

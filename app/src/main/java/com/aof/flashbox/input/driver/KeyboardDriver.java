@@ -35,7 +35,6 @@ public class KeyboardDriver extends BaseDriver {
         // 判断是否是可用键值
         KeyCodes.Codes key = AndroidKeyMap.getAndroidKeyMap().get(event.getKeyCode());
         if (key == null)
-            // 即使键值不可用依然消费掉该事件
             return true;
 
         // 判断是否为可用的动作
@@ -48,7 +47,7 @@ public class KeyboardDriver extends BaseDriver {
                 action = com.aof.flashbox.input.event.KeyEvent.Action.Up;
                 break;
             default:
-                return false;
+                return true;
         }
 
         // 生成输入事件
