@@ -26,13 +26,14 @@ public class ControllerDriver extends BaseDriver {
      * @return 是否拦截事件
      */
     public boolean keyEvent_to_inputEvent(KeyEvent event) {
-        // 判断是否来自选定的键盘设备
+        // 判断是否来自选定的控制器设备
         if (getConfig().getController().deviceId != event.getDeviceId())
             return false;
 
         // 获取映射键值并判断键值是否可用
-        // TODO: 实现手柄按键映射
-        KeyCodes.Codes key = KeyCodes.Codes.Unknown;
+        KeyCodes.Codes key = getConfig().getControllerBtn().getKey(event.getKeyCode());
+        if (key == null)
+            return false;
 
         // 判断是否为可用的动作
         com.aof.flashbox.input.event.KeyEvent.Action action;

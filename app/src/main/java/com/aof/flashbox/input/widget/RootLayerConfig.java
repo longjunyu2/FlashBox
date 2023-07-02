@@ -1,9 +1,12 @@
 package com.aof.flashbox.input.widget;
 
 import android.view.InputDevice;
+import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.aof.flashbox.input.key.KeyCodes;
 
 import java.util.Objects;
 
@@ -16,6 +19,8 @@ public class RootLayerConfig extends BaseLayerConfig {
     private InputDeviceInfo keyboard = new InputDeviceInfo();
 
     private InputDeviceInfo controller = new InputDeviceInfo();
+
+    private ControllerBtn controllerBtn = new ControllerBtn();
 
     public RootLayerConfig() {
         super();
@@ -107,6 +112,26 @@ public class RootLayerConfig extends BaseLayerConfig {
         return controller;
     }
 
+    /**
+     * 设置物理控制器的按键映射
+     *
+     * @param controllerBtn 物理控制器按键
+     * @return this
+     */
+    public RootLayerConfig setControllerBtn(ControllerBtn controllerBtn) {
+        this.controllerBtn = controllerBtn;
+        return this;
+    }
+
+    /**
+     * 获取物理控制器的按键映射
+     *
+     * @return 物理控制器按键
+     */
+    public ControllerBtn getControllerBtn() {
+        return controllerBtn;
+    }
+
     @Override
     public Type getType() {
         return Type.Root;
@@ -114,10 +139,10 @@ public class RootLayerConfig extends BaseLayerConfig {
 
     public static class InputDeviceInfo {
         // 四者构成唯一标识符
-        public String name;
-        public int vendorId;
-        public int productId;
-        public String descriptor;
+        public final String name;
+        public final int vendorId;
+        public final int productId;
+        public final String descriptor;
         // DeviceId是动态的，有可能在系统状态发生时改变，因此不足以作为唯一标识符
         public int deviceId;
 
@@ -158,5 +183,91 @@ public class RootLayerConfig extends BaseLayerConfig {
         public String toString() {
             return String.format("%s (%X:%X:%s)", name, vendorId, productId, descriptor.substring(0, 4));
         }
+    }
+
+    public static class ControllerBtn {
+        public String key_Button_A = "";
+        public String key_Button_B = "";
+        public String key_Button_X = "";
+        public String key_Button_Y = "";
+        public String key_Button_L1 = "";
+        public String key_Button_R1 = "";
+        public String key_Button_L2 = "";
+        public String key_Button_R2 = "";
+        public String key_Button_Back = "";
+        public String key_Button_Select = "";
+        public String key_Button_Start = "";
+        public String key_Button_ThumbL = "";
+        public String key_Button_ThumbR = "";
+        public String key_Button_Up = "";
+        public String key_Button_Down = "";
+        public String key_Button_Left = "";
+        public String key_Button_Right = "";
+
+        public KeyCodes.Codes getKey(int androidKeyCode) {
+            switch (androidKeyCode) {
+                case KeyEvent.KEYCODE_BUTTON_A:
+                    return keyCode(key_Button_A);
+                case KeyEvent.KEYCODE_BUTTON_B:
+                    return keyCode(key_Button_B);
+                case KeyEvent.KEYCODE_BUTTON_X:
+                    return keyCode(key_Button_X);
+                case KeyEvent.KEYCODE_BUTTON_Y:
+                    return keyCode(key_Button_Y);
+                case KeyEvent.KEYCODE_BUTTON_L1:
+                    return keyCode(key_Button_L1);
+                case KeyEvent.KEYCODE_BUTTON_R1:
+                    return keyCode(key_Button_R1);
+                case KeyEvent.KEYCODE_BUTTON_L2:
+                    return keyCode(key_Button_L2);
+                case KeyEvent.KEYCODE_BUTTON_R2:
+                    return keyCode(key_Button_R2);
+                case KeyEvent.KEYCODE_BACK:
+                    return keyCode(key_Button_Back);
+                case KeyEvent.KEYCODE_BUTTON_SELECT:
+                    return keyCode(key_Button_Select);
+                case KeyEvent.KEYCODE_BUTTON_START:
+                    return keyCode(key_Button_Start);
+                case KeyEvent.KEYCODE_BUTTON_THUMBL:
+                    return keyCode(key_Button_ThumbL);
+                case KeyEvent.KEYCODE_BUTTON_THUMBR:
+                    return keyCode(key_Button_ThumbR);
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    return keyCode(key_Button_Up);
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    return keyCode(key_Button_Down);
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    return keyCode(key_Button_Left);
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    return keyCode(key_Button_Right);
+                default:
+                    return null;
+            }
+        }
+
+        /**
+         * 从键名获取键值，同时排除实际键值为Unknown的键
+         *
+         * @param keyName 键名
+         * @return 键值
+         */
+        private KeyCodes.Codes keyCode(String keyName) {
+            if (keyName.equals(""))
+                return null;
+
+            KeyCodes.Codes key = null;
+
+            try {
+                key = KeyCodes.Codes.valueOf(keyName);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+
+            if (key != null && key.value() == KeyCodes.Codes.Unknown.value())
+                return null;
+
+            return key;
+        }
+
     }
 }
