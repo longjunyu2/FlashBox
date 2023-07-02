@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+
 import com.aof.flashbox.R;
 import com.aof.flashbox.input.IInputAgent;
 import com.aof.flashbox.input.dialog.RootEditDialog;
@@ -18,13 +20,15 @@ import com.aof.flashbox.input.driver.KeyboardDriver;
 import com.aof.flashbox.input.event.BaseInputEvent;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class RootLayer extends BaseLayer implements View.OnKeyListener, InputManager.InputDeviceListener {
+public class RootLayer extends BaseLayer implements InputManager.InputDeviceListener {
 
-    private FrameLayout layout;
+    private RootLayout layout;
 
     private KeyboardDriver keyboardDriver;
 
     private ControllerDriver controllerDriver;
+
+    private DispatchCallback dispatchCallback;
 
     private final InputManager inputManager;
 
@@ -36,7 +40,7 @@ public class RootLayer extends BaseLayer implements View.OnKeyListener, InputMan
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initView() {
-        layout = new FrameLayout(getAgent().getContext());
+        layout = new RootLayout(getAgent().getContext());
         layout.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));
@@ -63,8 +67,36 @@ public class RootLayer extends BaseLayer implements View.OnKeyListener, InputMan
             }
         });
 
-        // 设置物理按键监听器
-        layout.setOnKeyListener(this);
+        // 创建事件分发回调
+        dispatchCallback = new DispatchCallback() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent event) {
+                boolean ret = false;
+
+                // 优先使用键盘驱动器
+                if (getConfig().isEnableKeyboard())
+                    ret = keyboardDriver.keyEvent_to_inputEvent(event);
+
+                // 其次使用手柄驱动器
+                if (!ret && getConfig().isEnableController())
+                    ret = controllerDriver.keyEvent_to_inputEvent(event);
+
+                return ret;
+            }
+
+            @Override
+            public boolean dispatchGenericMotionEvent(MotionEvent event) {
+                return false;
+            }
+
+            @Override
+            public boolean dispatchCapturedPointerEvent(MotionEvent event) {
+                return false;
+            }
+        };
+
+        // 设置事件分发回调
+        layout.setDispatchCallback(dispatchCallback);
 
         // 设置输入设备监听器
         inputManager.registerInputDeviceListener(this, null);
@@ -131,21 +163,9 @@ public class RootLayer extends BaseLayer implements View.OnKeyListener, InputMan
         super.destroy();
         // 注销输入设备监听器
         inputManager.unregisterInputDeviceListener(this);
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        boolean ret = false;
-
-        // 优先使用键盘驱动器
-        if (getConfig().isEnableKeyboard())
-            ret = keyboardDriver.keyEvent_to_inputEvent(event);
-
-        // 其次使用手柄驱动器
-        if (!ret && getConfig().isEnableController())
-            ret = controllerDriver.keyEvent_to_inputEvent(event);
-
-        return ret;
+        // 注销事件分发回调
+        dispatchCallback = null;
+        layout.setDispatchCallback(null);
     }
 
     @Override
@@ -222,5 +242,54 @@ public class RootLayer extends BaseLayer implements View.OnKeyListener, InputMan
                 return;
             }
         }
+    }
+
+    private static class RootLayout extends FrameLayout {
+
+        private DispatchCallback dispatchCallback;
+
+        public RootLayout(@NonNull Context context) {
+            super(context);
+        }
+
+        public void setDispatchCallback(DispatchCallback callback) {
+            dispatchCallback = callback;
+        }
+
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent event) {
+            if (dispatchCallback != null) {
+                boolean ret = dispatchCallback.dispatchKeyEvent(event);
+                if (ret)
+                    return true;
+            }
+            return super.dispatchKeyEvent(event);
+        }
+
+        @Override
+        public boolean dispatchGenericMotionEvent(MotionEvent event) {
+            if (dispatchCallback != null) {
+                boolean ret = dispatchCallback.dispatchGenericMotionEvent(event);
+                if (ret)
+                    return true;
+            }
+            return super.dispatchGenericMotionEvent(event);
+        }
+
+        @Override
+        public boolean dispatchCapturedPointerEvent(MotionEvent event) {
+            if (dispatchCallback != null) {
+                boolean ret = dispatchCallback.dispatchCapturedPointerEvent(event);
+                if (ret)
+                    return true;
+            }
+            return super.dispatchCapturedPointerEvent(event);
+        }
+    }
+
+    private interface DispatchCallback {
+        boolean dispatchKeyEvent(KeyEvent event);
+        boolean dispatchGenericMotionEvent(MotionEvent event);
+        boolean dispatchCapturedPointerEvent(MotionEvent event);
     }
 }
