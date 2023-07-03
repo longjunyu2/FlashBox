@@ -128,8 +128,6 @@ public class ControllerDriver extends BaseDriver {
                 return keyCode(btn.key_Button_L1);
             case KeyEvent.KEYCODE_BUTTON_R1:
                 return keyCode(btn.key_Button_R1);
-            case KeyEvent.KEYCODE_BACK:
-                return keyCode(btn.key_Button_Back);
             case KeyEvent.KEYCODE_BUTTON_SELECT:
                 return keyCode(btn.key_Button_Select);
             case KeyEvent.KEYCODE_BUTTON_START:

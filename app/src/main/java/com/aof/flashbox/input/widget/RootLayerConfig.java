@@ -257,7 +257,6 @@ public class RootLayerConfig extends BaseLayerConfig {
         public String key_Button_Y = "";
         public String key_Button_L1 = "";
         public String key_Button_R1 = "";
-        public String key_Button_Back = "";
         public String key_Button_Select = "";
         public String key_Button_Start = "";
         public String key_Button_ThumbL = "";
