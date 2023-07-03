@@ -401,6 +401,8 @@ public class InputManager {
                 if (layer != null) {
                     // 触发控件删除的回调
                     deleteCallback.onLayerDelete(layer);
+                    // 取消控件的选中状态
+                    layer.setSelected(false);
                     // 移除对layer的引用以使其被正确回收
                     currentSelectedLayer = null;
                     // 触发选中状态改变回调
