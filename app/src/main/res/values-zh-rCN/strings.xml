@@ -30,4 +30,5 @@
     <string name="keyboard_unavailable">当前使用的键盘已被移除。</string>
     <string name="controller_available">一个可用的手柄已就绪。</string>
     <string name="controller_unavailable">当前使用的手柄已被移除。</string>
+    <string name="config_controller">配置手柄</string>
 </resources>

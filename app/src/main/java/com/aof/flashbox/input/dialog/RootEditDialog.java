@@ -160,6 +160,17 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
             }
         });
 
+        // 配置物理控制器项
+        AppCompatButton btnConfigController = findViewById(R.id.btn_config_controller);
+        assert btnConfigController != null;
+        // 点击按钮显示配置手柄对话框
+        btnConfigController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ControllerDialog(getContext(), config).show();
+            }
+        });
+
         // 首次更新选择的物理键盘和物理控制器
         updateKeyboardAndController();
 
