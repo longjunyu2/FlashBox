@@ -110,20 +110,23 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
         assert switchEnableController != null;
         switchEnableController.setChecked(config.isEnableController());
 
+        // 物理控制器选项组
+        View controllerItems = findViewById(R.id.controller_items);
+        assert controllerItems != null;
+
         // 选择物理控制器项
-        View viewSelectController = findViewById(R.id.select_controller);
         textSelectedController = findViewById(R.id.text_selected_controller);
         AppCompatButton btnSelectController = findViewById(R.id.btn_select_controller);
-        assert viewSelectController != null && textSelectedController != null && btnSelectController != null;
+        assert textSelectedController != null && btnSelectController != null;
         // 如果未启用物理控制器，则不显示选择物理控制器项
         if (!config.isEnableController())
-            viewSelectController.setVisibility(View.GONE);
+            controllerItems.setVisibility(View.GONE);
         // 为开关添加回调
         switchEnableController.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 更新选择物理控制器项的可见性
-                viewSelectController.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                controllerItems.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 // 更新配置
                 config.setEnableController(isChecked);
             }
