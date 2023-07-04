@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -24,30 +25,41 @@ public class ControllerView extends View {
 
     private final static int PointerColor = Color.parseColor("#FF0000FF");
 
+    private final static int EndLineColor = Color.parseColor("#FFFF0000");
+
     private final Drawable xboxFrontDrawable;
 
     private final Rect xboxFrontRect = new Rect();
 
-    private final Region buttonX = new NormalButton(ControllerModuleType.Button_X);
+    private final NormalButton buttonX = new NormalButton(ControllerModuleType.Button_X);
 
-    private final Region buttonY = new NormalButton(ControllerModuleType.Button_Y);
+    private final NormalButton buttonY = new NormalButton(ControllerModuleType.Button_Y);
 
-    private final Region buttonA = new NormalButton(ControllerModuleType.Button_A);
+    private final NormalButton buttonA = new NormalButton(ControllerModuleType.Button_A);
 
-    private final Region buttonB = new NormalButton(ControllerModuleType.Button_B);
+    private final NormalButton buttonB = new NormalButton(ControllerModuleType.Button_B);
 
-    private final Region buttonStart = new NormalButton(ControllerModuleType.Button_Start);
+    private final NormalButton buttonStart = new NormalButton(ControllerModuleType.Button_Start);
 
-    private final Region buttonBack = new NormalButton(ControllerModuleType.Button_Back);
+    private final NormalButton buttonBack = new NormalButton(ControllerModuleType.Button_Back);
 
-    private final Region joystickLeft = new Joystick(ControllerModuleType.Joystick_Left);
+    private final Joystick joystickLeft = new Joystick(ControllerModuleType.Joystick_Left);
 
-    private final Region joystickRight = new Joystick(ControllerModuleType.Joystick_Right);
+    private final Joystick joystickRight = new Joystick(ControllerModuleType.Joystick_Right);
 
-    private final Region dpad = new Dpad(ControllerModuleType.DPad);
+    private final Dpad dpad = new Dpad(ControllerModuleType.DPad);
+
+    private final LRB l1 = new LRB(ControllerModuleType.Button_L1);
+
+    private final LRB r1 = new LRB(ControllerModuleType.Button_R1);
+
+    private final Trigger triggerLeft = new Trigger(ControllerModuleType.Trigger_L2);
+
+    private final Trigger triggerRight = new Trigger(ControllerModuleType.Trigger_R2);
 
     private final Region[] regions = new Region[]{buttonX, buttonY, buttonA,
-            buttonB, buttonStart, buttonBack, joystickLeft, joystickRight, dpad};
+            buttonB, buttonStart, buttonBack, joystickLeft, joystickRight, dpad,
+            l1, r1, triggerLeft, triggerRight};
 
     private OnModuleClickCallback onModuleClickCallback;
 
@@ -56,8 +68,6 @@ public class ControllerView extends View {
     private final Rect tmpRect = new Rect();
 
     private String inputDeviceDescriptor = "";
-
-    // TODO: 添加 L1, R1, L2, R2 的支持
 
     public enum ControllerModuleType {
         Button_A,
@@ -136,26 +146,31 @@ public class ControllerView extends View {
         }
     }
 
-    private static abstract class Region extends Circle {
+    private interface Region {
+        boolean contains(float x, float y);
+
+        void onKeyEvent(KeyEvent event);
+
+        void onMotionEvent(MotionEvent event);
+
+        void onDraw(Canvas canvas);
+
+        ControllerModuleType getType();
+    }
+
+    private static abstract class CircleRegion extends Circle implements Region {
         private final ControllerModuleType type;
 
-        public Region(ControllerModuleType type) {
-            super();
+        public CircleRegion(ControllerModuleType type) {
             this.type = type;
         }
 
         public ControllerModuleType getType() {
             return type;
         }
-
-        public abstract void onKeyEvent(KeyEvent event);
-
-        public abstract void onMotionEvent(MotionEvent event);
-
-        public abstract void onDraw(Canvas canvas);
     }
 
-    private static class NormalButton extends Region {
+    private static class NormalButton extends CircleRegion {
         private final Paint paint = new Paint();
         private final int targetKeyCode;
         private boolean down;
@@ -184,15 +199,11 @@ public class ControllerView extends View {
                 case Button_Back:
                     targetKeyCode = KeyEvent.KEYCODE_BUTTON_SELECT;
                     break;
-                case Button_L1:
-                    targetKeyCode = KeyEvent.KEYCODE_BUTTON_L1;
-                    break;
-                case Button_R1:
-                    targetKeyCode = KeyEvent.KEYCODE_BUTTON_R1;
-                    break;
+                case Button_L3:
                 case Joystick_Left:
                     targetKeyCode = KeyEvent.KEYCODE_BUTTON_THUMBL;
                     break;
+                case Button_R3:
                 case Joystick_Right:
                     targetKeyCode = KeyEvent.KEYCODE_BUTTON_THUMBR;
                     break;
@@ -274,7 +285,7 @@ public class ControllerView extends View {
         }
     }
 
-    private static class Dpad extends Region {
+    private static class Dpad extends CircleRegion {
         private final Paint paint = new Paint();
         private float hatX;
         private float hatY;
@@ -306,6 +317,110 @@ public class ControllerView extends View {
             if (Math.abs(hatY) - 1f >= 0)
                 canvas.drawCircle(center.x,
                         hatY < 0 ? center.y - radius + 20 : center.y + radius - 20, 20, paint);
+        }
+    }
+
+    private static abstract class RectRegion extends RectF implements Region {
+        private final ControllerModuleType type;
+
+        public RectRegion(ControllerModuleType type) {
+            this.type = type;
+        }
+
+        public ControllerModuleType getType() {
+            return type;
+        }
+    }
+
+    private static class LRB extends RectRegion {
+        private final Paint paint = new Paint();
+        private final int targetKeyCode;
+        private boolean down;
+
+        public LRB(ControllerModuleType type) {
+            super(type);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(SelectedColor);
+
+            switch (type) {
+                case Button_L1:
+                    targetKeyCode = KeyEvent.KEYCODE_BUTTON_L1;
+                    break;
+                case Button_R1:
+                    targetKeyCode = KeyEvent.KEYCODE_BUTTON_R1;
+                    break;
+                default:
+                    targetKeyCode = -1;
+            }
+        }
+
+        @Override
+        public void onKeyEvent(KeyEvent event) {
+            if (event.getKeyCode() == targetKeyCode) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                    down = true;
+                else if (event.getAction() == KeyEvent.ACTION_UP)
+                    down = false;
+            }
+        }
+
+        @Override
+        public void onMotionEvent(MotionEvent event) {
+
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            if (down)
+                canvas.drawRect(this, paint);
+        }
+    }
+
+    private static class Trigger extends RectRegion {
+        private final static int PointerWidth = 5;
+        private final Paint paint1 = new Paint();
+        private final Paint paint2 = new Paint();
+        private final int axis;
+        private float axisValue;
+
+        public Trigger(ControllerModuleType type) {
+            super(type);
+            paint1.setColor(EndLineColor);
+            paint1.setStrokeWidth(PointerWidth);
+            paint2.setColor(PointerColor);
+            paint2.setStrokeWidth(PointerWidth);
+
+            switch (type) {
+                case Trigger_L2:
+                    axis = MotionEvent.AXIS_BRAKE;
+                    break;
+                case Trigger_R2:
+                    axis = MotionEvent.AXIS_GAS;
+                    break;
+                default:
+                    axis = -1;
+            }
+        }
+
+        @Override
+        public void onKeyEvent(KeyEvent event) {
+
+        }
+
+        @Override
+        public void onMotionEvent(MotionEvent event) {
+            if (event != null)
+                axisValue = event.getAxisValue(axis);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            float height = bottom - top;
+            float y = bottom - height * axisValue;
+
+            canvas.drawLine(left, top, right, top, paint1);
+            canvas.drawRect(left, y, right, bottom, paint2);
+            canvas.drawLine(left, bottom, right, bottom, paint2);
         }
     }
 
@@ -342,6 +457,10 @@ public class ControllerView extends View {
         float button2Radius = 0.0314f * height;
         float joystickRadius = 0.0879f * height;
         float dpadRadius = 0.108f * height;
+        float lWidth = 0.1257f * height;
+        float lHeight = 0.0427f * height;
+        float triggerWidth = 0.0321f * height;
+        float triggerHeight = 0.1006f * height;
 
         // X
         buttonX.set(width * 0.7f + left, height * 0.274f + top, buttonRadius);
@@ -361,6 +480,22 @@ public class ControllerView extends View {
         joystickRight.set(width * 0.630f + left, height * 0.504f + top, joystickRadius);
         // D-Pad
         dpad.set(width * 0.359f + left, height * 0.503f + top, dpadRadius);
+        // L1
+        float l1Left = height * 0.0125f;
+        float l1Top = height * 0.159f;
+        l1.set(l1Left, l1Top, l1Left + lWidth, l1Top + lHeight);
+        // R1
+        float r1Left = height * 1.285f;
+        float r1Top = height * 0.159f;
+        r1.set(r1Left, r1Top, r1Left + lWidth, r1Top + lHeight);
+        // Trigger Left
+        float l2Left = height * 0.0748f;
+        float l2Top = height * 0.0251f;
+        triggerLeft.set(l2Left, l2Top, l2Left + triggerWidth, l2Top + triggerHeight);
+        // Trigger Right
+        float r2Left = height * 1.3135f;
+        float r2Top = height * 0.0251f;
+        triggerRight.set(r2Left, r2Top, r2Left + triggerWidth, r2Top + triggerHeight);
 
         for (Region region : regions)
             region.onMotionEvent(null);
