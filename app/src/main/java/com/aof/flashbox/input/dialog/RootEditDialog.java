@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.InputDevice;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialog;
@@ -73,13 +71,6 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
                 config.setEnableKeyboard(isChecked);
             }
         });
-        // 点击文本框则显示文本框内容，防止文本内容过长导致的不可见
-        textSelectedKeyboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
         // 点击按钮则显示选择控制器的对话框
         btnSelectKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,13 +120,6 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
                 controllerItems.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 // 更新配置
                 config.setEnableController(isChecked);
-            }
-        });
-        // 点击文本框则显示文本框内容，防止文本内容过长导致的不可见
-        textSelectedController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
         // 点击按钮则显示选择控制器的对话框
@@ -270,6 +254,7 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
 
     /**
      * 判断设备是否是键盘
+     *
      * @param deviceId 设备id
      * @return 是否是键盘
      */
@@ -288,6 +273,7 @@ public class RootEditDialog extends AppCompatDialog implements InputManager.Inpu
 
     /**
      * 判断设备是否是控制器
+     *
      * @param deviceId 设备id
      * @return 是否是控制器
      */
