@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class RootLayerConfig extends BaseLayerConfig {
@@ -20,7 +21,7 @@ public class RootLayerConfig extends BaseLayerConfig {
 
     private ControllerBtn controllerBtn = new ControllerBtn();
 
-    private ControllerAxis[] controllerAxes = ControllerAxis.createDefaultAxes();
+    private final ControllerAxis[] controllerAxes = ControllerAxis.createDefaultAxes();
 
     public RootLayerConfig() {
         super();
@@ -202,27 +203,28 @@ public class RootLayerConfig extends BaseLayerConfig {
         // 触发值 百分比
         public int trigger_per_value;
         // 键名
-        public String key;
+        public ArrayList<String> key;
         // 默认触发值
         private final static int DefaultTriggerValue = 30;
 
-        public ControllerAxis(int axis_flag, int dir, int trigger_per_value, String key) {
+        public ControllerAxis(int axis_flag, int dir, int trigger_per_value, ArrayList<String> key) {
             this.axis_flag = axis_flag;
             this.dir = dir;
             this.trigger_per_value = trigger_per_value;
             this.key = key;
         }
 
-        public ControllerAxis(int axis_flag, int dir, String key) {
+        public ControllerAxis(int axis_flag, int dir, ArrayList<String> key) {
             this(axis_flag, dir, DefaultTriggerValue, key);
         }
 
         public ControllerAxis(int axis_flag, int dir) {
-            this(axis_flag, dir, DefaultTriggerValue, "");
+            this(axis_flag, dir, DefaultTriggerValue, new ArrayList<>());
         }
 
         /**
          * 生成默认的轴配置
+         *
          * @return 全部的轴配置
          */
         public static ControllerAxis[] createDefaultAxes() {
@@ -251,15 +253,15 @@ public class RootLayerConfig extends BaseLayerConfig {
     }
 
     public static class ControllerBtn {
-        public String key_Button_A = "";
-        public String key_Button_B = "";
-        public String key_Button_X = "";
-        public String key_Button_Y = "";
-        public String key_Button_L1 = "";
-        public String key_Button_R1 = "";
-        public String key_Button_Select = "";
-        public String key_Button_Start = "";
-        public String key_Button_ThumbL = "";
-        public String key_Button_ThumbR = "";
+        public ArrayList<String> key_Button_A = new ArrayList<>();
+        public ArrayList<String> key_Button_B = new ArrayList<>();
+        public ArrayList<String> key_Button_X = new ArrayList<>();
+        public ArrayList<String> key_Button_Y = new ArrayList<>();
+        public ArrayList<String> key_Button_L1 = new ArrayList<>();
+        public ArrayList<String> key_Button_R1 = new ArrayList<>();
+        public ArrayList<String> key_Button_Select = new ArrayList<>();
+        public ArrayList<String> key_Button_Start = new ArrayList<>();
+        public ArrayList<String> key_Button_ThumbL = new ArrayList<>();
+        public ArrayList<String> key_Button_ThumbR = new ArrayList<>();
     }
 }

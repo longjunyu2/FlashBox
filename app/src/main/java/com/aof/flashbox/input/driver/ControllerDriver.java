@@ -41,14 +41,14 @@ public class ControllerDriver extends BaseDriver {
         RootLayerConfig.ControllerAxis[] axes = getConfig().getControllerAxes();
         for (RootLayerConfig.ControllerAxis axis : axes) {
             // 检查键值是否可用
-            KeyCodes.Codes key = keyCode(axis.key);
-            if (key == null)
+            ArrayList<KeyCodes.Codes> keys = keyCode(axis.key);
+            if (keys.size() == 0)
                 continue;
 
             // 处理轴信息
             float realValue = event.getAxisValue(axis.axis_flag) * axis.dir;
             float triggerValue = axis.trigger_per_value * 0.01f;
-            com.aof.flashbox.input.event.KeyEvent.Action action = null;
+            com.aof.flashbox.input.event.KeyEvent.Action action;
 
             if (realValue > triggerValue) {
                 // 正触发
@@ -57,17 +57,20 @@ public class ControllerDriver extends BaseDriver {
                     triggeredList.add(axis);
                 } else
                     continue;
-            } else if (realValue < triggerValue){
+            } else if (realValue < triggerValue) {
                 // 负触发
                 if (triggeredList.contains(axis)) {
                     action = com.aof.flashbox.input.event.KeyEvent.Action.Up;
                     triggeredList.remove(axis);
                 } else
                     continue;
+            } else {
+                continue;
             }
 
             // 生成输入事件
-            getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
+            for (KeyCodes.Codes key : keys)
+                getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
         }
 
         return true;
@@ -86,8 +89,9 @@ public class ControllerDriver extends BaseDriver {
             return false;
 
         // 获取映射键值并判断键值是否可用
-        KeyCodes.Codes key = getKey(event.getKeyCode());
-        if (key == null)
+        ArrayList<KeyCodes.Codes> keys = getKeys(event.getKeyCode());
+        assert keys != null;
+        if (keys.size() == 0)
             return true;
 
         // 获取动作
@@ -104,16 +108,19 @@ public class ControllerDriver extends BaseDriver {
         }
 
         // 生成输入事件
-        getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
+        for (KeyCodes.Codes key : keys)
+            getOnEventGenCallback().onEventGen(new com.aof.flashbox.input.event.KeyEvent(action, key));
+
         return true;
     }
 
     /**
      * 获取手柄按钮对应的键
+     *
      * @param androidKeyCode Android键值
      * @return 键
      */
-    private KeyCodes.Codes getKey(int androidKeyCode) {
+    private ArrayList<KeyCodes.Codes> getKeys(int androidKeyCode) {
         RootLayerConfig.ControllerBtn btn = getConfig().getControllerBtn();
         switch (androidKeyCode) {
             case KeyEvent.KEYCODE_BUTTON_A:
@@ -144,24 +151,25 @@ public class ControllerDriver extends BaseDriver {
     /**
      * 从键名获取键值，同时排除实际键值为Unknown的键
      *
-     * @param keyName 键名
+     * @param keyNames 键名
      * @return 键值
      */
-    private KeyCodes.Codes keyCode(String keyName) {
-        if (keyName.equals(""))
-            return null;
+    private ArrayList<KeyCodes.Codes> keyCode(ArrayList<String> keyNames) {
+        ArrayList<KeyCodes.Codes> keys = new ArrayList<>();
 
-        KeyCodes.Codes key = null;
+        for (String keyName : keyNames) {
+            KeyCodes.Codes key = null;
 
-        try {
-            key = KeyCodes.Codes.valueOf(keyName);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            try {
+                key = KeyCodes.Codes.valueOf(keyName);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+
+            if (key != null && key.value() != KeyCodes.Codes.Unknown.value())
+                keys.add(key);
         }
 
-        if (key != null && key.value() == KeyCodes.Codes.Unknown.value())
-            return null;
-
-        return key;
+        return keys;
     }
 }
