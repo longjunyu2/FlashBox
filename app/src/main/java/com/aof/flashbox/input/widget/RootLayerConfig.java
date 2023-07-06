@@ -15,16 +15,20 @@ public class RootLayerConfig extends BaseLayerConfig {
 
     private boolean enableController;
 
-    private InputDeviceInfo keyboard = new InputDeviceInfo();
+    private InputDeviceInfo keyboard;
 
-    private InputDeviceInfo controller = new InputDeviceInfo();
+    private InputDeviceInfo controller;
 
-    private ControllerBtn controllerBtn = new ControllerBtn();
+    private ControllerBtn controllerBtn;
 
-    private final ControllerAxis[] controllerAxes = ControllerAxis.createDefaultAxes();
+    private final ControllerAxes controllerAxes;
 
     public RootLayerConfig() {
         super();
+        this.keyboard = new InputDeviceInfo();
+        this.controller = new InputDeviceInfo();
+        this.controllerBtn = new ControllerBtn();
+        this.controllerAxes = new ControllerAxes();
 
         // 根控制层应该占满屏幕
         setHeight(ScreenDiv);
@@ -114,17 +118,6 @@ public class RootLayerConfig extends BaseLayerConfig {
     }
 
     /**
-     * 设置物理控制器的按键映射
-     *
-     * @param controllerBtn 物理控制器按键
-     * @return this
-     */
-    public RootLayerConfig setControllerBtn(ControllerBtn controllerBtn) {
-        this.controllerBtn = controllerBtn;
-        return this;
-    }
-
-    /**
      * 获取物理控制器的按键映射
      *
      * @return 物理控制器按键
@@ -138,7 +131,7 @@ public class RootLayerConfig extends BaseLayerConfig {
      *
      * @return 轴配置
      */
-    public ControllerAxis[] getControllerAxes() {
+    public ControllerAxes getControllerAxes() {
         return this.controllerAxes;
     }
 
@@ -205,7 +198,7 @@ public class RootLayerConfig extends BaseLayerConfig {
         // 键名
         public ArrayList<String> key;
         // 默认触发值
-        private final static int DefaultTriggerValue = 30;
+        private final static int DefaultTriggerValue = 20;
 
         public ControllerAxis(int axis_flag, int dir, int trigger_per_value, ArrayList<String> key) {
             this.axis_flag = axis_flag;
@@ -253,15 +246,73 @@ public class RootLayerConfig extends BaseLayerConfig {
     }
 
     public static class ControllerBtn {
-        public ArrayList<String> key_Button_A = new ArrayList<>();
-        public ArrayList<String> key_Button_B = new ArrayList<>();
-        public ArrayList<String> key_Button_X = new ArrayList<>();
-        public ArrayList<String> key_Button_Y = new ArrayList<>();
-        public ArrayList<String> key_Button_L1 = new ArrayList<>();
-        public ArrayList<String> key_Button_R1 = new ArrayList<>();
-        public ArrayList<String> key_Button_Select = new ArrayList<>();
-        public ArrayList<String> key_Button_Start = new ArrayList<>();
-        public ArrayList<String> key_Button_ThumbL = new ArrayList<>();
-        public ArrayList<String> key_Button_ThumbR = new ArrayList<>();
+        public ArrayList<String> key_Button_A;
+        public ArrayList<String> key_Button_B;
+        public ArrayList<String> key_Button_X;
+        public ArrayList<String> key_Button_Y;
+        public ArrayList<String> key_Button_L1;
+        public ArrayList<String> key_Button_R1;
+        public ArrayList<String> key_Button_Select;
+        public ArrayList<String> key_Button_Start;
+        public ArrayList<String> key_Button_ThumbL;
+        public ArrayList<String> key_Button_ThumbR;
+
+        public ControllerBtn() {
+            key_Button_A = new ArrayList<>();
+            key_Button_B = new ArrayList<>();
+            key_Button_X = new ArrayList<>();
+            key_Button_Y = new ArrayList<>();
+            key_Button_L1 = new ArrayList<>();
+            key_Button_R1 = new ArrayList<>();
+            key_Button_Select = new ArrayList<>();
+            key_Button_Start = new ArrayList<>();
+            key_Button_ThumbL = new ArrayList<>();
+            key_Button_ThumbR = new ArrayList<>();
+        }
+    }
+
+    public static class ControllerAxes {
+        // 左摇杆
+        public ControllerAxis axis_x_p;
+        public ControllerAxis axis_x_n;
+        public ControllerAxis axis_y_p;
+        public ControllerAxis axis_y_n;
+        // 右摇杆
+        public ControllerAxis axis_z_p;
+        public ControllerAxis axis_z_n;
+        public ControllerAxis axis_rz_p;
+        public ControllerAxis axis_rz_n;
+        // 左扳机
+        public ControllerAxis axis_brake;
+        // 右扳机
+        public ControllerAxis axis_gas;
+        // 苦力帽(方向键/十字键)
+        public ControllerAxis axis_hat_x_p;
+        public ControllerAxis axis_hat_x_n;
+        public ControllerAxis axis_hat_y_p;
+        public ControllerAxis axis_hat_y_n;
+
+        public ControllerAxes() {
+            axis_x_p = new ControllerAxis(MotionEvent.AXIS_X, 1);
+            axis_x_n = new ControllerAxis(MotionEvent.AXIS_X, -1);
+            axis_y_p = new ControllerAxis(MotionEvent.AXIS_Y, 1);
+            axis_y_n = new ControllerAxis(MotionEvent.AXIS_Y, -1);
+            axis_z_p = new ControllerAxis(MotionEvent.AXIS_Z, 1);
+            axis_z_n = new ControllerAxis(MotionEvent.AXIS_Z, -1);
+            axis_rz_p = new ControllerAxis(MotionEvent.AXIS_RZ, 1);
+            axis_rz_n = new ControllerAxis(MotionEvent.AXIS_RZ, -1);
+            axis_brake = new ControllerAxis(MotionEvent.AXIS_BRAKE, 1);
+            axis_gas = new ControllerAxis(MotionEvent.AXIS_GAS, 1);
+            axis_hat_x_p = new ControllerAxis(MotionEvent.AXIS_HAT_X, 1);
+            axis_hat_x_n = new ControllerAxis(MotionEvent.AXIS_HAT_X, -1);
+            axis_hat_y_p = new ControllerAxis(MotionEvent.AXIS_HAT_Y, 1);
+            axis_hat_y_n = new ControllerAxis(MotionEvent.AXIS_HAT_Y, -1);
+        }
+
+        public ControllerAxis[] getAxes() {
+            return new ControllerAxis[]{axis_x_p, axis_x_n, axis_y_p, axis_y_n,
+                    axis_z_p, axis_z_n, axis_rz_p, axis_rz_n, axis_brake, axis_gas,
+                    axis_hat_x_p, axis_hat_x_n, axis_hat_y_p, axis_hat_y_n};
+        }
     }
 }

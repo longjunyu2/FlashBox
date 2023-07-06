@@ -38,7 +38,7 @@ public class ControllerDriver extends BaseDriver {
             return false;
 
         // 遍历所有轴
-        RootLayerConfig.ControllerAxis[] axes = getConfig().getControllerAxes();
+        RootLayerConfig.ControllerAxis[] axes = getConfig().getControllerAxes().getAxes();
         for (RootLayerConfig.ControllerAxis axis : axes) {
             // 检查键值是否可用
             ArrayList<KeyCodes.Codes> keys = keyCode(axis.key);
