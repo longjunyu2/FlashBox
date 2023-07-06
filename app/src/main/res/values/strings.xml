@@ -30,4 +30,13 @@
     <string name="controller_available">An available controller has been ready.</string>
     <string name="controller_unavailable">The controller has been removed.</string>
     <string name="config_controller">Config Controller</string>
+    <string name="name">Name</string>
+    <string name="trigger_value">Trigger Value</string>
+    <string name="config_map">Config Map</string>
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="direction">Direction</string>
+    <string name="button_name">Button Name</string>
 </resources>

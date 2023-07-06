@@ -31,4 +31,13 @@
     <string name="controller_available">一个可用的手柄已就绪。</string>
     <string name="controller_unavailable">当前使用的手柄已被移除。</string>
     <string name="config_controller">配置手柄</string>
+    <string name="name">名称</string>
+    <string name="trigger_value">触发值</string>
+    <string name="config_map">编辑映射</string>
+    <string name="up">上</string>
+    <string name="down">下</string>
+    <string name="left">左</string>
+    <string name="right">右</string>
+    <string name="direction">方向</string>
+    <string name="button_name">按钮名</string>
 </resources>

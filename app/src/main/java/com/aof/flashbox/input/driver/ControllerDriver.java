@@ -90,8 +90,7 @@ public class ControllerDriver extends BaseDriver {
 
         // 获取映射键值并判断键值是否可用
         ArrayList<KeyCodes.Codes> keys = getKeys(event.getKeyCode());
-        assert keys != null;
-        if (keys.size() == 0)
+        if (keys == null || keys.size() == 0)
             return true;
 
         // 获取动作
