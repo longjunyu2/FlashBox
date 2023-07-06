@@ -101,7 +101,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.aof.flashbox.input.view.ToastTextView
                         android:id="@+id/text_key"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
