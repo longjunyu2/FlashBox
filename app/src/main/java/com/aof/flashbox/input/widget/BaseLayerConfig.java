@@ -5,7 +5,8 @@ public abstract class BaseLayerConfig {
     public enum Type {
         Root,
         GameButton,
-        GameDPad
+        GameDPad,
+        GameJoyStick
     }
 
     // 比例因子

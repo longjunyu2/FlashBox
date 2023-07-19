@@ -21,6 +21,7 @@ import com.aof.flashbox.input.widget.BaseLayer;
 import com.aof.flashbox.input.widget.BaseLayerConfig;
 import com.aof.flashbox.input.widget.GameButtonLayerConfig;
 import com.aof.flashbox.input.widget.GameDPadLayerConfig;
+import com.aof.flashbox.input.widget.GameJoystickLayerConfig;
 import com.aof.flashbox.input.widget.LayerBuilder;
 import com.aof.flashbox.input.widget.RootLayer;
 import com.aof.flashbox.player.IPlayerBridge;
@@ -169,6 +170,13 @@ public class InputManager {
                                     } else if (selOption.equals(mContext.getResources().getString(R.string.layer_dpad))) {
                                         // 创建方向键配置
                                         config = new GameDPadLayerConfig();
+                                    } else if (selOption.equals(mContext.getResources().getString(R.string.layer_joystick))) {
+                                        // 创建摇杆配置
+                                        config = new GameJoystickLayerConfig()
+                                                .setX(50)
+                                                .setY(50)
+                                                .setHeight(50)
+                                                .setWidth(50);
                                     }
                                     // 创建并初始化Layer
                                     layer = (new LayerBuilder()).withAgent(mAgent).withConfig(config).build();

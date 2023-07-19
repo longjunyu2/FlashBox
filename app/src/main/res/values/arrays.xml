@@ -3,6 +3,7 @@
     <array name="array_add_layer_options">
         <item>@string/layer_button</item>
         <item>@string/layer_dpad</item>
+        <item>@string/layer_joystick</item>
     </array>
 
 </resources>

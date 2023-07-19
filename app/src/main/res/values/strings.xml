@@ -39,4 +39,5 @@
     <string name="right">Right</string>
     <string name="direction">Direction</string>
     <string name="button_name">Button Name</string>
+    <string name="layer_joystick">JoyStick</string>
 </resources>

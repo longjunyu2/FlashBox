@@ -40,4 +40,5 @@
     <string name="right">右</string>
     <string name="direction">方向</string>
     <string name="button_name">按钮名</string>
+    <string name="layer_joystick">摇杆</string>
 </resources>
