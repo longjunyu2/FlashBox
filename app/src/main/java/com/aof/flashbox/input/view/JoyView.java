@@ -21,11 +21,15 @@ import com.aof.flashbox.input.view.graphics.Vector2D;
 
 public class JoyView extends View {
 
-    private enum Dir {
+    public enum Dir {
         UP,
         DOWN,
         LEFT,
         RIGHT,
+        RIGHT_UP,
+        RIGHT_DOWN,
+        LEFT_UP,
+        LEFT_DOWN,
         CENTER
     }
 
@@ -183,15 +187,27 @@ public class JoyView extends View {
             radians = (float) (2 * Math.PI - radians);
         float angle = (float) Math.toDegrees(radians);
         // 判断位置
-        if (angle >= 45 && angle < 135)
+        if (angle >= 22.5f && angle < 67.5f)
+            // 右上
+            currentDir = Dir.RIGHT_UP;
+        else if (angle >= 67.5f && angle < 112.5f)
             // 右
             currentDir = Dir.RIGHT;
-        else if (angle >= 135 && angle < 225)
+        else if (angle >= 112.5f && angle < 157.5f)
+            // 右下
+            currentDir = Dir.RIGHT_DOWN;
+        else if (angle >= 157.5f && angle < 202.5f)
             // 下
             currentDir = Dir.DOWN;
-        else if (angle >= 225 && angle < 315)
+        else if (angle >= 202.5f && angle < 247.5f)
+            // 左下
+            currentDir = Dir.LEFT_DOWN;
+        else if (angle >= 247.5f && angle < 292.5f)
             // 左
             currentDir = Dir.LEFT;
+        else if (angle >= 292.5f && angle < 337.5f)
+            // 左上
+            currentDir = Dir.LEFT_UP;
         else
             // 上
             currentDir = Dir.UP;
@@ -215,6 +231,18 @@ public class JoyView extends View {
                     break;
                 case RIGHT:
                     joyChangedListener.onRight();
+                    break;
+                case RIGHT_UP:
+                    joyChangedListener.onRight_Up();
+                    break;
+                case RIGHT_DOWN:
+                    joyChangedListener.onRight_Down();
+                    break;
+                case LEFT_UP:
+                    joyChangedListener.onLeft_Up();
+                    break;
+                case LEFT_DOWN:
+                    joyChangedListener.onLeft_Down();
                     break;
                 case CENTER:
                     joyChangedListener.onCenter();
@@ -249,6 +277,14 @@ public class JoyView extends View {
         void onLeft();
 
         void onRight();
+
+        void onRight_Up();
+
+        void onRight_Down();
+
+        void onLeft_Up();
+
+        void onLeft_Down();
 
         void onCenter();
     }

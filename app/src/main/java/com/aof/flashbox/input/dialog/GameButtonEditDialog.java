@@ -188,8 +188,4 @@ public class GameButtonEditDialog extends AppCompatDialog {
         }
         view.setText(str.toString());
     }
-
-    public interface OnEditFinishedCallback {
-        void onEditFinished();
-    }
 }

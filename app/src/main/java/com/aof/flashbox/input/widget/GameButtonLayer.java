@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.aof.flashbox.input.IInputAgent;
 import com.aof.flashbox.input.dialog.GameButtonEditDialog;
+import com.aof.flashbox.input.dialog.OnEditFinishedCallback;
 import com.aof.flashbox.input.driver.BaseDriver;
 import com.aof.flashbox.input.driver.GameButtonDefaultDriver;
 import com.aof.flashbox.input.event.BaseInputEvent;
@@ -103,7 +104,7 @@ public class GameButtonLayer extends BaseLayer {
     @Override
     public void openEditDialog() {
         GameButtonEditDialog dialog = new GameButtonEditDialog(getAgent().getContext(), getConfig());
-        dialog.setOnEditFinishedCallback(new GameButtonEditDialog.OnEditFinishedCallback() {
+        dialog.setOnEditFinishedCallback(new OnEditFinishedCallback() {
             @Override
             public void onEditFinished() {
                 // 编辑完成后更新控件

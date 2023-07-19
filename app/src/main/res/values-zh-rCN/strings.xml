@@ -41,4 +41,9 @@
     <string name="direction">方向</string>
     <string name="button_name">按钮名</string>
     <string name="layer_joystick">摇杆</string>
+    <string name="view_size">控件大小</string>
+    <string name="arrow_up">&#8593;</string>
+    <string name="arrow_down">&#8595;</string>
+    <string name="arrow_left">&#8592;</string>
+    <string name="arrow_right">&#8594;</string>
 </resources>

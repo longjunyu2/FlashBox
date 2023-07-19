@@ -5,17 +5,24 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aof.flashbox.input.IInputAgent;
+import com.aof.flashbox.input.dialog.GameButtonEditDialog;
+import com.aof.flashbox.input.dialog.GameJoyStickEditDialog;
+import com.aof.flashbox.input.dialog.OnEditFinishedCallback;
+import com.aof.flashbox.input.driver.BaseDriver;
+import com.aof.flashbox.input.driver.GameJoyStickDefaultDriver;
+import com.aof.flashbox.input.event.BaseInputEvent;
 import com.aof.flashbox.input.view.JoyView;
 import com.aof.flashbox.input.view.graphics.Circle;
 
 public class GameJoyStickLayer extends BaseLayer {
 
     private MJoyView joyView;
+
+    private GameJoyStickDefaultDriver driver;
 
     public GameJoyStickLayer(IInputAgent agent, GameJoystickLayerConfig config) {
         super(agent, config);
@@ -31,31 +38,50 @@ public class GameJoyStickLayer extends BaseLayer {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         joyView.setOnTouchListener(this);
-        // TODO: 实现相应的驱动器
         joyView.setOnJoyChangedListener(new JoyView.OnJoyChangedListener() {
             @Override
             public void onUp() {
-                Log.e("test", "Up");
+                driver.up();
             }
 
             @Override
             public void onDown() {
-                Log.e("test", "Down");
+                driver.down();
             }
 
             @Override
             public void onLeft() {
-                Log.e("test", "Left");
+                driver.left();
             }
 
             @Override
             public void onRight() {
-                Log.e("test", "Right");
+                driver.right();
+            }
+
+            @Override
+            public void onRight_Up() {
+                driver.right_up();
+            }
+
+            @Override
+            public void onRight_Down() {
+                driver.right_down();
+            }
+
+            @Override
+            public void onLeft_Up() {
+                driver.left_up();
+            }
+
+            @Override
+            public void onLeft_Down() {
+                driver.left_down();
             }
 
             @Override
             public void onCenter() {
-                Log.e("test", "Center");
+                driver.center();
             }
         });
 
@@ -68,6 +94,14 @@ public class GameJoyStickLayer extends BaseLayer {
             updateDivW();
             updateDivH();
         }
+
+        driver = new GameJoyStickDefaultDriver(getConfig());
+        driver.setOnEventGenCallback(new BaseDriver.OnEventGenCallback() {
+            @Override
+            public void onEventGen(BaseInputEvent event) {
+                getAgent().offerEvent(event);
+            }
+        });
 
     }
 
@@ -83,7 +117,15 @@ public class GameJoyStickLayer extends BaseLayer {
 
     @Override
     public void openEditDialog() {
-        // TODO: 实现相应的编辑功能
+        GameJoyStickEditDialog dialog = new GameJoyStickEditDialog(getAgent().getContext(), getConfig());
+        dialog.setOnEditFinishedCallback(new OnEditFinishedCallback() {
+            @Override
+            public void onEditFinished() {
+                // 编辑完成后更新控件
+                updateAll();
+            }
+        });
+        dialog.show();
     }
 
     @Override

@@ -40,4 +40,9 @@
     <string name="direction">Direction</string>
     <string name="button_name">Button Name</string>
     <string name="layer_joystick">JoyStick</string>
+    <string name="view_size">Size</string>
+    <string name="arrow_up">&#8593;</string>
+    <string name="arrow_down">&#8595;</string>
+    <string name="arrow_left">&#8592;</string>
+    <string name="arrow_right">&#8594;</string>
 </resources>
