@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.aof.flashbox.R;
+import com.aof.flashbox.input.view.graphics.Circle;
 
 public class ControllerView extends View {
 
@@ -100,50 +101,22 @@ public class ControllerView extends View {
         xboxFrontDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.xbox_front, null);
     }
 
+    /**
+     * 设置点击回调
+     *
+     * @param callback 回调
+     */
     public void setOnModuleClickCallback(OnModuleClickCallback callback) {
         onModuleClickCallback = callback;
     }
 
+    /**
+     * 设置目标设备的描述符
+     *
+     * @param descriptor 设备描述符
+     */
     public void setDescriptor(String descriptor) {
         inputDeviceDescriptor = descriptor;
-    }
-
-    private static class Circle {
-        public PointF center;
-        public float radius;
-
-        public Circle() {
-            this(0, 0, 0);
-        }
-
-        public Circle(float cx, float cy, float radius) {
-            this(new PointF(cx, cy), radius);
-        }
-
-        public Circle(PointF center, float radius) {
-            this.center = center;
-            this.radius = radius;
-        }
-
-        public boolean isEmpty() {
-            return radius == 0;
-        }
-
-        public boolean contains(PointF p) {
-            if (isEmpty())
-                return false;
-            return Math.sqrt(Math.pow(p.x - center.x, 2) + Math.pow(p.y - center.y, 2)) < radius;
-        }
-
-        public boolean contains(float x, float y) {
-            return contains(new PointF(x, y));
-        }
-
-        public void set(float cx, float cy, float radius) {
-            center.x = cx;
-            center.y = cy;
-            this.radius = radius;
-        }
     }
 
     private interface Region {
@@ -446,6 +419,9 @@ public class ControllerView extends View {
             region.onDraw(canvas);
     }
 
+    /**
+     * 更新各区域参数
+     */
     private void updateRegions() {
         xboxFrontRect.set(0, 0, (int) (1.4174f * getHeight()), getHeight());
 
