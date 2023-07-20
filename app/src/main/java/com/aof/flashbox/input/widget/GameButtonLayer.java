@@ -2,7 +2,10 @@ package com.aof.flashbox.input.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -118,7 +121,13 @@ public class GameButtonLayer extends BaseLayer {
 
         GradientDrawable drawable;
 
-        private final static int MiddleBlue = Color.parseColor("#3498D8");
+        private final static int StrokeWidth = 5;
+
+        private boolean selected = false;
+
+        private final Rect drawRect = new Rect();
+
+        private final Paint mPaint = new Paint();
 
         public GameButton(@NonNull Context context) {
             super(context);
@@ -127,11 +136,16 @@ public class GameButtonLayer extends BaseLayer {
         }
 
         private void init() {
+            // 设置画笔
+            mPaint.setColor(Color.RED);
+            mPaint.setStrokeWidth(StrokeWidth);
+            mPaint.setStyle(Paint.Style.STROKE);
+
             // 设置背景
             drawable = new GradientDrawable();
             drawable.setColor(Color.TRANSPARENT);
             drawable.setStroke(8, Color.BLACK);
-            drawable.setCornerRadius(20f);
+            drawable.setCornerRadius(180f);
             setBackground(drawable);
 
             // 设置文字对齐居中
@@ -141,10 +155,17 @@ public class GameButtonLayer extends BaseLayer {
         }
 
         public void setSelected(boolean selected) {
-            // 根据选中状态更新背景
-            drawable.setStroke(8, selected ? MiddleBlue : Color.BLACK);
+            this.selected = selected;
+            invalidate();
+        }
 
-            setBackground(drawable);
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            if (selected) {
+                getDrawingRect(drawRect);
+                canvas.drawRect(drawRect, mPaint);
+            }
         }
     }
 

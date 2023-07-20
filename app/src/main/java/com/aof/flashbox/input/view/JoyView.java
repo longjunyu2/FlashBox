@@ -252,15 +252,6 @@ public class JoyView extends View {
     }
 
     /**
-     * 获取轮廓形状
-     *
-     * @return 轮廓形状
-     */
-    public Circle getCircle() {
-        return new Circle(outCircle);
-    }
-
-    /**
      * 设置方向改变监听器
      *
      * @param listener 监听器

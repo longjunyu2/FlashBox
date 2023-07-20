@@ -5,18 +5,17 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aof.flashbox.input.IInputAgent;
-import com.aof.flashbox.input.dialog.GameButtonEditDialog;
 import com.aof.flashbox.input.dialog.GameJoyStickEditDialog;
 import com.aof.flashbox.input.dialog.OnEditFinishedCallback;
 import com.aof.flashbox.input.driver.BaseDriver;
 import com.aof.flashbox.input.driver.GameJoyStickDefaultDriver;
 import com.aof.flashbox.input.event.BaseInputEvent;
 import com.aof.flashbox.input.view.JoyView;
-import com.aof.flashbox.input.view.graphics.Circle;
 
 public class GameJoyStickLayer extends BaseLayer {
 
@@ -134,7 +133,6 @@ public class GameJoyStickLayer extends BaseLayer {
     }
 
     private static class MJoyView extends JoyView {
-        private final static int MiddleBlue = Color.parseColor("#3498D8");
 
         private final static int StrokeWidth = 5;
 
@@ -142,10 +140,12 @@ public class GameJoyStickLayer extends BaseLayer {
 
         private final Paint mPaint;
 
+        private final Rect drawRect = new Rect();
+
         public MJoyView(Context context) {
             super(context);
             mPaint = new Paint();
-            mPaint.setColor(MiddleBlue);
+            mPaint.setColor(Color.RED);
             mPaint.setStrokeWidth(StrokeWidth);
             mPaint.setStyle(Paint.Style.STROKE);
         }
@@ -159,8 +159,8 @@ public class GameJoyStickLayer extends BaseLayer {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             if (selected) {
-                Circle circle = getCircle();
-                canvas.drawCircle(circle.center.x, circle.center.y, circle.radius, mPaint);
+                getDrawingRect(drawRect);
+                canvas.drawRect(drawRect, mPaint);
             }
         }
     }
