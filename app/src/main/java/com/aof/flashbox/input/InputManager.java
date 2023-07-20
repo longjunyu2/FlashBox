@@ -169,7 +169,11 @@ public class InputManager {
                                                 .setText("New");
                                     } else if (selOption.equals(mContext.getResources().getString(R.string.layer_dpad))) {
                                         // 创建方向键配置
-                                        config = new GameDPadLayerConfig();
+                                        config = new GameDPadLayerConfig()
+                                                .setX(50)
+                                                .setY(50)
+                                                .setWidth(50)
+                                                .setHeight(50);
                                     } else if (selOption.equals(mContext.getResources().getString(R.string.layer_joystick))) {
                                         // 创建摇杆配置
                                         config = new GameJoystickLayerConfig()

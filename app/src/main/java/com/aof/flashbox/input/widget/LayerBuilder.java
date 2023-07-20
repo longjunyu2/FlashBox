@@ -43,6 +43,9 @@ public class LayerBuilder {
             case GameButton:
                 layer = new GameButtonLayer(mAgent, (GameButtonLayerConfig) mConfig);
                 break;
+            case GameDPad:
+                layer = new GameDPadLayer(mAgent, (GameDPadLayerConfig) mConfig);
+                break;
             case GameJoyStick:
                 layer = new GameJoyStickLayer(mAgent, (GameJoystickLayerConfig) mConfig);
                 break;

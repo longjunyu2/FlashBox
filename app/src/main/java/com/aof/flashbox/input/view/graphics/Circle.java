@@ -1,6 +1,7 @@
 package com.aof.flashbox.input.view.graphics;
 
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -82,5 +83,13 @@ public class Circle {
      */
     public void set(float cx, float cy) {
         set(cx, cy, radius);
+    }
+
+    /**
+     * 生成外切矩形
+     * @param rect 矩形
+     */
+    public void genRect(Rect rect) {
+        rect.set((int) (center.x - radius), (int) (center.y - radius) , (int) (center.x + radius), (int) (center.y + radius));
     }
 }
