@@ -6,16 +6,22 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aof.flashbox.input.IInputAgent;
+import com.aof.flashbox.input.dialog.GameDPadEditDialog;
+import com.aof.flashbox.input.dialog.OnEditFinishedCallback;
+import com.aof.flashbox.input.driver.BaseDriver;
+import com.aof.flashbox.input.driver.GameDPadDefaultDriver;
+import com.aof.flashbox.input.event.BaseInputEvent;
 import com.aof.flashbox.input.view.DPadView;
 
 public class GameDPadLayer extends BaseLayer {
 
     private MDPadView dPadView;
+
+    private GameDPadDefaultDriver driver;
 
     public GameDPadLayer(IInputAgent agent, GameDPadLayerConfig config) {
         super(agent, config);
@@ -33,52 +39,52 @@ public class GameDPadLayer extends BaseLayer {
         dPadView.setOnDPadChangedListener(new DPadView.OnDPadChangedListener() {
             @Override
             public void onUp() {
-                Log.e("test", "up");
+                driver.up();
             }
 
             @Override
             public void onDown() {
-                Log.e("test", "down");
+                driver.down();
             }
 
             @Override
             public void onLeft() {
-                Log.e("test", "left");
+                driver.left();
             }
 
             @Override
             public void onRight() {
-                Log.e("test", "right");
+                driver.right();
             }
 
             @Override
             public void onRight_Up() {
-                Log.e("test", "right_up");
+                driver.right_up();
             }
 
             @Override
             public void onRight_Down() {
-                Log.e("test", "right_down");
+                driver.right_down();
             }
 
             @Override
             public void onLeft_Up() {
-                Log.e("test", "left_up");
+                driver.left_up();
             }
 
             @Override
             public void onLeft_Down() {
-                Log.e("test", "left_down");
+                driver.left_down();
             }
 
             @Override
             public void onCenter() {
-                Log.e("test", "center");
+                driver.center();
             }
         });
         dPadView.setOnTouchListener(this);
 
-        if (config.getX() != 0 || config.getY() != 0 ) {
+        if (config.getX() != 0 || config.getY() != 0) {
             updateDivX();
             updateDivY();
         }
@@ -87,6 +93,14 @@ public class GameDPadLayer extends BaseLayer {
             updateDivW();
             updateDivH();
         }
+
+        driver = new GameDPadDefaultDriver(getConfig());
+        driver.setOnEventGenCallback(new BaseDriver.OnEventGenCallback() {
+            @Override
+            public void onEventGen(BaseInputEvent event) {
+                getAgent().offerEvent(event);
+            }
+        });
     }
 
     @Override
@@ -101,7 +115,15 @@ public class GameDPadLayer extends BaseLayer {
 
     @Override
     public void openEditDialog() {
-
+        GameDPadEditDialog dialog = new GameDPadEditDialog(getAgent().getContext(), getConfig());
+        dialog.setOnEditFinishedCallback(new OnEditFinishedCallback() {
+            @Override
+            public void onEditFinished() {
+                // 编辑完成后更新控件
+                updateAll();
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -110,6 +132,7 @@ public class GameDPadLayer extends BaseLayer {
     }
 
     private static class MDPadView extends DPadView {
+
         private final static int StrokeWidth = 5;
 
         private boolean selected = false;

@@ -16,22 +16,12 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.aof.flashbox.input.view.DPadView.Dir;
+
 import com.aof.flashbox.input.view.graphics.Circle;
 import com.aof.flashbox.input.view.graphics.Vector2D;
 
 public class JoyView extends View {
-
-    public enum Dir {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT,
-        RIGHT_UP,
-        RIGHT_DOWN,
-        LEFT_UP,
-        LEFT_DOWN,
-        CENTER
-    }
 
     private OnJoyChangedListener joyChangedListener;
 
