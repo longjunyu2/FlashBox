@@ -46,4 +46,5 @@
     <string name="arrow_down">&#8595;</string>
     <string name="arrow_left">&#8592;</string>
     <string name="arrow_right">&#8594;</string>
+    <string name="no_name">未命名</string>
 </resources>

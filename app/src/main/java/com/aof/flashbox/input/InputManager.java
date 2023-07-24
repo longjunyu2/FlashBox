@@ -166,7 +166,7 @@ public class InputManager {
                                                 .setY(50)
                                                 .setHeight(15)
                                                 .setWidth(15)
-                                                .setText("New");
+                                                .setText(mContext.getResources().getString(R.string.no_name));
                                     } else if (selOption.equals(mContext.getResources().getString(R.string.layer_dpad))) {
                                         // 创建方向键配置
                                         config = new GameDPadLayerConfig()
